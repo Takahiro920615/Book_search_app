@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './Login.css';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -69,26 +70,36 @@ function Login() {
   }
 
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-        />
-        <button type="submit">Login</button> {/* ログインボタンを追加 */}
-      </form>
-      <button onClick={testAuth}>Test Protected Endpoint</button> {/* フォーム外に移動 */}
-      <button onClick={handleLogout}>Logout</button>
-      {message && <p>{message}</p>}
+    <div className="login-container">
+      <div className="login-box">
+        <h2 className="login-title">Welcome Back</h2>
+        <form onSubmit={handleSubmit} className="login-form">
+          <div className="form-group">
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+              className="login-input"
+            />
+          </div>
+          <div className="form-group">
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
+              className="login-input"
+            />
+          </div>
+          <button type="submit" className="login-button">Sign In</button>
+        </form>
+        <div className="button-group">
+          <button onClick={testAuth} className="secondary-button">Test Protected Endpoint</button>
+          <button onClick={handleLogout} className="secondary-button">Logout</button>
+        </div>
+        {message && <p className="message">{message}</p>}
+      </div>
     </div>
   )
 }
