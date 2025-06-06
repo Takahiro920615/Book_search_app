@@ -1,9 +1,16 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './Users.css';
+
+interface UserData {
+  id: number;
+  email: string;
+  last_login: string;
+}
 
 function Users() {
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
@@ -54,24 +61,26 @@ function Users() {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">User Dashboard</h2>
-      {userData ? (
-        <div>
-          <p className="text-lg">Welcome, {userData.email || 'User'}!</p>
-          <p className="text-gray-600">User ID: {userData.id}</p>
-          <p className="text-gray-600">Last Login: {userData.last_login || 'N/A'}</p>
-        </div>
-      ) : (
-        <p>Loading user data...</p>
-      )}
-      <button
-        onClick={handleLogout}
-        className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-      >
-        Logout
-      </button>
-      {message && <p className="mt-2 text-red-500">{message}</p>}
+    <div className="users-container">
+      <div className="users-box">
+        <h2 className="users-title">User Dashboard</h2>
+        {userData ? (
+          <div className="user-info">
+            <p className="welcome-text">Welcome, {userData.email || 'User'}!</p>
+            <p>User ID: {userData.id}</p>
+            <p>Last Login: {userData.last_login || 'N/A'}</p>
+          </div>
+        ) : (
+          <p className="loading-text">Loading user data...</p>
+        )}
+        <button
+          onClick={handleLogout}
+          className="logout-button"
+        >
+          Logout
+        </button>
+        {message && <p className="message">{message}</p>}
+      </div>
     </div>
   );
 }
