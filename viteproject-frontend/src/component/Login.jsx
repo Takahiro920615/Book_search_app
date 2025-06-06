@@ -1,10 +1,12 @@
-import { useState } from 'react'
-import axios from 'axios'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Login() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [message, setMessage] = useState('')
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -20,6 +22,7 @@ function Login() {
       localStorage.setItem('token', token)
       setMessage('Login successful!')
       console.log('Token saved:', token) // デバッグ用
+      navigate('/users')
     } catch (error) {
       setMessage(`Login failed: ${error.response?.data?.error || error.message}`)
       console.error('Login error:', error.response || error) // デバッグ用
@@ -40,6 +43,7 @@ function Login() {
       setEmail('') // フォームをリセット
       setPassword('')
       setMessage('Logout successful!')
+      navigate('/');
     } catch (error) {
       setMessage(`Logout failed: ${error.response?.data?.error || error.message}`)
       console.error('Logout error:', error.response || error)
