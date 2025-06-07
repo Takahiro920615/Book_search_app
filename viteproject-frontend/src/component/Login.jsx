@@ -92,7 +92,10 @@ function Login() {
               className="login-input"
             />
           </div>
-          <button type="submit" className="login-button">Sign In</button>
+          <button type="submit" className="login-button">Log In</button>
+          <button type="button" onClick={() => navigate('/signup')} className="create-account-button">
+            Create New Account
+          </button>
         </form>
         <div className="button-group">
           <button onClick={testAuth} className="secondary-button">Test Protected Endpoint</button>

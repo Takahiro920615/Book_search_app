@@ -73,12 +73,14 @@ function Users() {
         ) : (
           <p className="loading-text">Loading user data...</p>
         )}
-        <button
-          onClick={handleLogout}
-          className="logout-button"
-        >
-          Logout
-        </button>
+        <div className="button-group">
+          <button
+            onClick={handleLogout}
+            className="logout-button"
+          >
+            Logout
+          </button>
+        </div>
         {message && <p className="message">{message}</p>}
       </div>
     </div>
