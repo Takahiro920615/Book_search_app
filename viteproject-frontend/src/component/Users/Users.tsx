@@ -6,7 +6,7 @@ import './Users.css';
 interface UserData {
   id: number;
   email: string;
-  last_login: string;
+  last_login?: string;
 }
 
 function Users() {
@@ -67,8 +67,8 @@ function Users() {
         {userData ? (
           <div className="user-info">
             <p className="welcome-text">Welcome, {userData.email || 'User'}!</p>
-            <p>User ID: {userData.id}</p>
-            <p>Last Login: {userData.last_login || 'N/A'}</p>
+            <p className="text-gray-600">User ID: {userData.id}</p>
+            <p className="text-gray-600">Last Login: {userData.last_login || 'N/A'}</p>
           </div>
         ) : (
           <p className="loading-text">Loading user data...</p>

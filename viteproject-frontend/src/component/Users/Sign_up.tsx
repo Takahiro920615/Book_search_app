@@ -12,31 +12,42 @@ function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (password !== passwordConfirmation) {
       setMessage('Passwords do not match!');
       return;
     }
 
     try {
-      const response = await axios.post('/api/sign_up', {
-        user: {
-          email,
-          password,
-          password_confirmation: passwordConfirmation
+      const response = await axios.post(
+        '/api/sign_up', // Viteプロキシでhttp://localhost:3000/api/sign_upに転送
+        {
+          user: {
+            email,
+            password,
+            password_confirmation: passwordConfirmation,
+          },
+        },
+        {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
         }
-      });
-
-      const token = response.headers.authorization;
+      );
+      console.log('Response:', response.data); // デバッグ用
+      const token = response.data.token || response.headers['authorization']?.replace('Bearer ', '');
       if (token) {
-        localStorage.setItem('token', token);
-        setMessage('Registration successful! You can now log in.');
+        localStorage.setItem('token', token); // トークンを保存
+        setMessage(response.data.message);
+        navigate('/users');
       } else {
         setMessage('Registration successful but no token received!');
       }
     } catch (error) {
-      setMessage(`Registration failed: ${error.response?.data?.error || error.message}`);
       console.error('Registration error:', error.response || error);
+      const errorMessage = error.response?.data?.error || error.message;
+      setMessage(`Registration failed: ${errorMessage}`);
     }
   };
 
@@ -83,4 +94,4 @@ function SignUp() {
   );
 }
 
-export default SignUp; 
+export default SignUp;
