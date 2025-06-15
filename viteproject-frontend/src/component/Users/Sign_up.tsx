@@ -18,26 +18,19 @@ function SignUp() {
         user: {
           email,
           password,
-          password_confirmation: passwordConfirmation,
-        },
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
+          passwordConfirmation,
         },
       });
-      const token = response.headers.authorization;
-      if (!token) {
-        setMessage('No token received in response!');
-        return;
+      const token = response.data.token;
+      if (token) {
+        const bearerToken = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
+        localStorage.setItem('token', bearerToken);
+        navigate('/users');// 登録後にユーザーページへ遷移
+      } else {
+        setMessage('Token not received');
       }
-      localStorage.setItem('token', token);
-      setMessage('Sign up successful!');
-      console.log('Token saved:', token);
-      navigate('/users');
     } catch (error) {
-      setMessage(`Sign up failed: ${error.response?.data?.error || error.message}`);
-      console.error('Sign up error:', error.response || error);
+      setMessage(`Registration failed: ${error.response?.data?.errors || error.message}`);
     }
   };
 

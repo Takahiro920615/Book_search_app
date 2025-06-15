@@ -20,11 +20,18 @@ function Login() {
           'Content-Type': 'application/json',
         },
       });
-      const token = response.headers.authorization;
+  
+      let token = response.headers.authorization;
       if (!token) {
         setMessage('No token received in response!');
         return;
       }
+  
+      // ✅ 2重 Bearer 対策：既に含まれているか厳密にチェック
+      if (!/^Bearer\s/.test(token)) {
+        token = `Bearer ${token}`;
+      }
+  
       localStorage.setItem('token', token);
       setMessage('Login successful!');
       console.log('Token saved:', token);
@@ -34,6 +41,7 @@ function Login() {
       console.error('Login error:', error.response || error);
     }
   };
+  
 
   const handleLogout = async () => {
     const token = localStorage.getItem('token');
