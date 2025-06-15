@@ -1,3 +1,4 @@
+// src/Users.tsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -23,8 +24,12 @@ function Users() {
         return;
       }
       try {
-        const response = await axios.get('http://localhost:3000/api/user', {
-          headers: { Authorization: token },
+        const response = await axios.get('/api/user', { // Vite プロキシを使用
+          headers: {
+            Authorization: token,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json', // JSON レスポンスを明示
+          },
         });
         setUserData(response.data);
         setMessage('User data loaded successfully!');
@@ -48,7 +53,7 @@ function Users() {
       return;
     }
     try {
-      await axios.delete('http://localhost:3000/api/sign_out', {
+      await axios.delete('/api/sign_out', {
         headers: { Authorization: token },
       });
       localStorage.removeItem('token');
@@ -74,10 +79,7 @@ function Users() {
           <p className="loading-text">Loading user data...</p>
         )}
         <div className="button-group">
-          <button
-            onClick={handleLogout}
-            className="logout-button"
-          >
+          <button onClick={handleLogout} className="logout-button">
             Logout
           </button>
         </div>

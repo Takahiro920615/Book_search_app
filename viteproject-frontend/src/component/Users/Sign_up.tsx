@@ -1,3 +1,4 @@
+// src/Sign_up.tsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -10,44 +11,33 @@ function SignUp() {
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (password !== passwordConfirmation) {
-      setMessage('Passwords do not match!');
-      return;
-    }
-
     try {
-      const response = await axios.post(
-        '/api/sign_up', // Viteプロキシでhttp://localhost:3000/api/sign_upに転送
-        {
-          user: {
-            email,
-            password,
-            password_confirmation: passwordConfirmation,
-          },
+      const response = await axios.post('/api/sign_up', {
+        user: {
+          email,
+          password,
+          password_confirmation: passwordConfirmation,
         },
-        {
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      console.log('Response:', response.data); // デバッグ用
-      const token = response.data.token || response.headers['authorization']?.replace('Bearer ', '');
-      if (token) {
-        localStorage.setItem('token', token); // トークンを保存
-        setMessage(response.data.message);
-        navigate('/users');
-      } else {
-        setMessage('Registration successful but no token received!');
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      });
+      const token = response.headers.authorization;
+      if (!token) {
+        setMessage('No token received in response!');
+        return;
       }
+      localStorage.setItem('token', token);
+      setMessage('Sign up successful!');
+      console.log('Token saved:', token);
+      navigate('/users');
     } catch (error) {
-      console.error('Registration error:', error.response || error);
-      const errorMessage = error.response?.data?.error || error.message;
-      setMessage(`Registration failed: ${errorMessage}`);
+      setMessage(`Sign up failed: ${error.response?.data?.error || error.message}`);
+      console.error('Sign up error:', error.response || error);
     }
   };
 
@@ -63,7 +53,7 @@ function SignUp() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
               className="signup-input"
-              required
+              autoComplete="email"
             />
           </div>
           <div className="form-group">
@@ -73,7 +63,7 @@ function SignUp() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
               className="signup-input"
-              required
+              autoComplete="new-password"
             />
           </div>
           <div className="form-group">
@@ -83,10 +73,13 @@ function SignUp() {
               onChange={(e) => setPasswordConfirmation(e.target.value)}
               placeholder="Confirm Password"
               className="signup-input"
-              required
+              autoComplete="new-password"
             />
           </div>
           <button type="submit" className="signup-button">Sign Up</button>
+          <button type="button" onClick={() => navigate('/login')} className="login-button">
+            Back to Login
+          </button>
         </form>
         {message && <p className="message">{message}</p>}
       </div>
