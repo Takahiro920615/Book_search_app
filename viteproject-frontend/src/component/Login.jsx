@@ -18,7 +18,9 @@ function Login() {
       }, {
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
+        withCredentials: true,
       });
   
       let token = response.headers.authorization;
