@@ -1,5 +1,5 @@
 // src/Login.jsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';
@@ -8,10 +8,29 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    const error = urlParams.get('error');
+    console.log('URL Params:', window.location.search);
+    console.log('Token:', token);
+    console.log('Error:', error);
+    if (token) {
+      localStorage.setItem('token', `Bearer ${token}`);
+      console.log('Token saved, navigating to /users');
+      navigate('/users');
+    } else if (error) {
+      setMessage(`Googleログインエラー: ${decodeURIComponent(error)}`);
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     try {
       const response = await axios.post('http://localhost:3000/api/sign_in', {
         user: { email, password },
@@ -29,7 +48,6 @@ function Login() {
         return;
       }
   
-      // ✅ 2重 Bearer 対策：既に含まれているか厳密にチェック
       if (!/^Bearer\s/.test(token)) {
         token = `Bearer ${token}`;
       }
@@ -41,14 +59,18 @@ function Login() {
     } catch (error) {
       setMessage(`Login failed: ${error.response?.data?.error || error.message}`);
       console.error('Login error:', error.response || error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
-  
 
   const handleLogout = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     const token = localStorage.getItem('token');
     if (!token) {
       setMessage('No token found, already logged out!');
+      setIsSubmitting(false);
       return;
     }
     try {
@@ -63,13 +85,18 @@ function Login() {
     } catch (error) {
       setMessage(`Logout failed: ${error.response?.data?.error || error.message}`);
       console.error('Logout error:', error.response || error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const testAuth = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     const token = localStorage.getItem('token');
     if (!token) {
       setMessage('No token found!');
+      setIsSubmitting(false);
       return;
     }
     try {
@@ -81,7 +108,16 @@ function Login() {
     } catch (error) {
       setMessage(`Protected request failed: ${error.response?.data?.error || error.message}`);
       console.error('Protected error:', error.response || error);
+    } finally {
+      setIsSubmitting(false);
     }
+  };
+
+  const handleGoogleLogin = () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    console.log('Starting Google OAuth flow');
+    window.location.href = '/auth/google_oauth2'; // リダイレクト方式
   };
 
   return (
@@ -109,14 +145,15 @@ function Login() {
               autoComplete="current-password"
             />
           </div>
-          <button type="submit" className="login-button">Log In</button>
-          <button type="button" onClick={() => navigate('/signup')} className="create-account-button">
+          <button type="submit" className="login-button" disabled={isSubmitting}>Log In</button>
+          <button type="button" onClick={() => navigate('/signup')} className="create-account-button" disabled={isSubmitting}>
             Create New Account
           </button>
+          <button onClick={handleGoogleLogin} disabled={isSubmitting}>Login with Google</button>
         </form>
         <div className="button-group">
-          <button onClick={testAuth} className="secondary-button">Test Protected Endpoint</button>
-          <button onClick={handleLogout} className="secondary-button">Logout</button>
+          <button onClick={testAuth} className="secondary-button" disabled={isSubmitting}>Test Protected Endpoint</button>
+          <button onClick={handleLogout} className="secondary-button" disabled={isSubmitting}>Logout</button>
         </div>
         {message && <p className="message">{message}</p>}
       </div>

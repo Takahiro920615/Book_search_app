@@ -31,6 +31,7 @@ function Users() {
             'Accept': 'application/json', // JSON レスポンスを明示
           },
         });
+        console.log('User data:', response.data); 
         setUserData(response.data);
         setMessage('User data loaded successfully!');
       } catch (error) {
