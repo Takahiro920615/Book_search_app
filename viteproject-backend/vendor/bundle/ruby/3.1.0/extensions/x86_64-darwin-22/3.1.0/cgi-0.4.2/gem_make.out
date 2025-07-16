@@ -1,0 +1,16 @@
+current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/cgi-0.4.2/ext/cgi/escape
+/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20250523-65329-meqb3b.rb extconf.rb
+creating Makefile
+
+current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/cgi-0.4.2/ext/cgi/escape
+make DESTDIR\= clean
+
+current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/cgi-0.4.2/ext/cgi/escape
+make DESTDIR\=
+compiling escape.c
+linking shared-object cgi/escape.bundle
+ld: warning: -multiply_defined is obsolete
+
+current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/cgi-0.4.2/ext/cgi/escape
+make DESTDIR\= install
+/usr/bin/install -c -m 0755 escape.bundle ./.gem.20250523-65329-6ihdsg/cgi
