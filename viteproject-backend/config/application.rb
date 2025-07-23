@@ -4,7 +4,10 @@ require "rails/all"
 
 Bundler.require(*Rails.groups)
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5c96798d613c9e5990b20671c099f1b118a8d046
 module ViteprojectBackend
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
