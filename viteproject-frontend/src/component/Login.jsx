@@ -117,7 +117,7 @@ function Login() {
     if (isSubmitting) return;
     setIsSubmitting(true);
     console.log('Starting Google OAuth flow');
-    window.location.href = '/auth/google_oauth2'; // リダイレクト方式
+    window.location.href = 'http://localhost:3000/api/auth/google_oauth2'; // リダイレクト方式
   };
 
   return (
