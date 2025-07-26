@@ -8,9 +8,10 @@ Rails.application.routes.draw do
     sign_up: '',
     registration: 'sign_up'
   }
-  # ,skip: [:omniauth_callbacks, :passwords, :confirmations]
-
-  # OmniAuth用のルート（Googleログインのみ）
+  
+  devise_scope :user do
+    get 'api/users/auth/:provider/callback', to: 'users/omniauth_callbacks#google_oauth2'
+  end
 
   # テスト用ルート
   get '/test', to: 'test#index'

@@ -1,22 +1,15 @@
 # app/controllers/users/omniauth_callbacks_controller.rb
-class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
+class Users::OmniauthCallbacksController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:google_oauth2], raise: false
 
   def google_oauth2
-    auth = request.env['omniauth.auth']
-    Rails.logger.info("OmniAuth auth: #{auth.inspect}") # デバッグ用
-    unless auth
-      Rails.logger.error("OmniAuth auth data is nil: #{request.env['omniauth.error']&.inspect}")
-      return render json: { error: 'Authentication data not found', status: 'error' }, status: :unprocessable_entity
-    end
-
-    user = User.from_omniauth(auth)
-    if user.persisted?
-      sign_in(user)
-      token = generate_jwt_token(user)
-      render json: { token: token, status: 'success', user: { id: user.id, email: user.email } }, status: :ok
+    @user = User.from_omniauth(request.env['omniauth.auth'])
+  
+    if @user.persisted?
+      token = Warden::JWTAuth::UserEncoder.new.call(@user, :user, nil).first
+      redirect_to "http://localhost:5173/users?token=#{token}"
     else
-      render json: { error: 'Googleログインに失敗しました。', status: 'error' }, status: :unprocessable_entity
+      redirect_to "http://localhost:5173/login?error=auth_failed"
     end
   end
 

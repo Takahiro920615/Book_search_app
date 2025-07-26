@@ -17,32 +17,36 @@ function Users() {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token'); // Googleログイン後もここに格納
       if (!token) {
         setMessage('No token found, please log in.');
         navigate('/');
         return;
       }
+  
       try {
-        const response = await axios.get('/api/user', { // Vite プロキシを使用
+        const response = await axios.get('/api/user', {
           headers: {
-            Authorization: token,
+            Authorization: `Bearer ${token}`, // ← ★ ここに "Bearer " を追加
             'Content-Type': 'application/json',
-            'Accept': 'application/json', // JSON レスポンスを明示
+            'Accept': 'application/json',
           },
         });
-        console.log('User data:', response.data); 
+  
+        console.log('User data:', response.data);
         setUserData(response.data);
         setMessage('User data loaded successfully!');
-      } catch (error) {
-        setMessage(`Failed to load user data: ${error.response?.data?.error || error.message}`);
+      } catch (error: any) {
         console.error('User data error:', error.response || error);
+        setMessage(`Failed to load user data: ${error.response?.data?.error || error.message}`);
+  
         if (error.response?.status === 401) {
           localStorage.removeItem('token');
           navigate('/');
         }
       }
     };
+  
     fetchUserData();
   }, [navigate]);
 
