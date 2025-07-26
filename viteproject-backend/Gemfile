@@ -15,7 +15,6 @@ gem 'devise-jwt', '~> 0.12'
 gem 'jwt'
 gem 'rack-cors'
 gem 'omniauth-google-oauth2'
-gem 'dotenv-rails', groups: [:development, :test]
 gem 'warden-jwt_auth'
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
@@ -44,6 +43,7 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+  gem 'dotenv-rails'
 
 end
 
