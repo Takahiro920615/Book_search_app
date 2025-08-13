@@ -12,18 +12,21 @@ function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    sessionStorage.removeItem('oauth_redirect_done'); // テスト用に毎回リセット
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
     const error = urlParams.get('error');
-    console.log('URL Params:', window.location.search);
-    console.log('Token:', token);
-    console.log('Error:', error);
-    if (token) {
+  
+    const hasRedirected = sessionStorage.getItem('oauth_redirect_done');
+  
+    if (token && !hasRedirected) {
       localStorage.setItem('token', `Bearer ${token}`);
-      console.log('Token saved, navigating to /users');
+      sessionStorage.setItem('oauth_redirect_done', 'true'); // ← フラグを保存
+      window.history.replaceState(null, '', '/users');
       navigate('/users');
-    } else if (error) {
+    } else if (error && !hasRedirected) {
       setMessage(`Googleログインエラー: ${decodeURIComponent(error)}`);
+      sessionStorage.setItem('oauth_redirect_done', 'true'); // エラーでも一度だけ
     }
   }, [navigate]);
 
@@ -42,17 +45,13 @@ function Login() {
         withCredentials: true,
       });
   
-      let token = response.headers.authorization;
+      const { token } = response.data;
       if (!token) {
         setMessage('No token received in response!');
         return;
       }
   
-      if (!/^Bearer\s/.test(token)) {
-        token = `Bearer ${token}`;
-      }
-  
-      localStorage.setItem('token', token);
+      localStorage.setItem('token', `Bearer ${token}`);
       setMessage('Login successful!');
       console.log('Token saved:', token);
       navigate('/users');
@@ -76,6 +75,7 @@ function Login() {
     try {
       await axios.delete('http://localhost:3000/api/sign_out', {
         headers: { Authorization: token },
+        withCredentials: true,
       });
       localStorage.removeItem('token');
       setEmail('');

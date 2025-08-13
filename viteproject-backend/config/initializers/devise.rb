@@ -10,19 +10,22 @@ Devise.setup do |config|
 
   # omnioauthストラテジーの設定
   config.omniauth :google_oauth2,
-  ENV['GOOGLE_CLIENT_ID'],
-  ENV['GOOGLE_CLIENT_SECRET'],
-  {
+    ENV['GOOGLE_CLIENT_ID'],
+    ENV['GOOGLE_CLIENT_SECRET'],
     scope: 'email,profile',
     prompt: 'select_account',
     image_aspect_ratio: 'square',
     image_size: 50,
     access_type: 'offline',
-    redirect_uri: 'http://localhost:3000/api/auth/google_oauth2/callback',
+    redirect_uri: 'http://localhost:3000/api/auth/google_oauth2/callback', # omniauth.rbから統合
+    provider_ignores_state: false, # セキュリティのためにfalseを推奨（必要に応じてtrueに変更）
     client_options: {
-      ssl: { verify: false }
+      ssl: { verify: false } # ローカル開発用。本番では削除またはtrueに
     }
-  }
+
+  # OmniAuthのグローバル設定（omniauth.rbから統合）
+  OmniAuth.config.allowed_request_methods = %i[get]
+  OmniAuth.config.silence_get_warning = true
 
   config.jwt do |jwt|
     jwt.secret = ENV['SECRET_KEY_BASE'] || Rails.application.credentials.secret_key_base
