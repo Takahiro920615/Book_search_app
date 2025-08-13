@@ -22,6 +22,7 @@ Devise.setup do |config|
     client_options: {
       ssl: { verify: false } # ローカル開発用。本番では削除またはtrueに
     }
+    
 
   # OmniAuthのグローバル設定（omniauth.rbから統合）
   OmniAuth.config.allowed_request_methods = %i[get]
