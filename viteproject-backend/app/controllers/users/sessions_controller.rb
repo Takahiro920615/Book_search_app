@@ -3,29 +3,31 @@ class Users::SessionsController < Devise::SessionsController
   respond_to :json
 
   def create
-    self.resource = warden.authenticate!(auth_options)
-    sign_in(resource_name, resource)
-    token = generate_jwt_token(resource)
-    render json: {
-      status: 'success',
-      token: token,
-      user: { id: resource.id, email: resource.email }
-    }, status: :ok
+    user = User.find_by(email: params[:user][:email])
+  
+    if user&.valid_password?(params[:user][:password])
+      token = generate_jwt_token(user)
+      render json: { token: token }, status: :ok
+    else
+      render json: { error: 'Invalid email or password' }, status: :unauthorized
+    end
   end
-
+  
   def destroy
-    signed_out = sign_out(resource_name)
-    render json: { status: signed_out ? 'success' : 'error' }, status: :ok
+    # APIではサーバー側でセッションを持たないので、フロントでトークン削除すればOK
+    # JWTブラックリストを使う場合はここで無効化処理
+    head :no_content
   end
 
   private
 
   def generate_jwt_token(user)
-    JWT.encode(
-      { sub: user.id, scp: 'user', iat: Time.now.to_i, exp: Time.now.to_i + 3600 },
-      Rails.application.secrets.secret_key_base || ENV['SECRET_KEY_BASE'],
-      'HS256'
-    )
+    payload = {
+      user_id: user.id,
+      exp: (Time.now + 24.hours).to_i # 24時間後に期限切れ
+    }
+    secret_key = Rails.application.credentials.secret_key_base || ENV['SECRET_KEY_BASE']
+    JWT.encode(payload, secret_key)
   end
 
   def auth_options

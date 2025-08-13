@@ -20,7 +20,7 @@ function Login() {
     const hasRedirected = sessionStorage.getItem('oauth_redirect_done');
   
     if (token && !hasRedirected) {
-      localStorage.setItem('token', `Bearer ${token}`);
+      localStorage.setItem('token', token);
       sessionStorage.setItem('oauth_redirect_done', 'true'); // ← フラグを保存
       window.history.replaceState(null, '', '/users');
       navigate('/users');

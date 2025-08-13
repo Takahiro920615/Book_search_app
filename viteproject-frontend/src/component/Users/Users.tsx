@@ -52,21 +52,19 @@ function Users() {
 
   const handleLogout = async () => {
     const token = localStorage.getItem('token');
-    if (!token) {
-      setMessage('No token found, already logged out!');
-      navigate('/');
-      return;
-    }
+  
     try {
-      await axios.delete('/api/sign_out', {
-        headers: { Authorization: token },
+      await axios.delete('http://localhost:3000/api/sign_out', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
       });
       localStorage.removeItem('token');
-      setMessage('Logout successful!');
-      navigate('/');
+      navigate('/login');
     } catch (error) {
-      setMessage(`Logout failed: ${error.response?.data?.error || error.message}`);
-      console.error('Logout error:', error.response || error);
+      console.error('Logout error:', error);
     }
   };
 

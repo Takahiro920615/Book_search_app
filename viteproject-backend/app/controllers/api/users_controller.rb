@@ -21,12 +21,17 @@ module Api
 
     # 認証失敗時のカスタムレスポンス
     def authenticate_user!
-      token = request.headers['Authorization'].to_s.sub('Bearer ', '')
+      header = request.headers['Authorization']
+      token = header&.split(' ')&.last
+      return render json: { error: 'Token missing' }, status: :unauthorized unless token
+    
       begin
-        Warden::JWTAuth::UserDecoder.new.call(token, :user, nil)
-        super
-      rescue Warden::JWTAuth::InvalidToken, Warden::JWTAuth::NilUser
-        render json: { error: 'Unauthorized' }, status: :unauthorized
+        decoded_token = JWT.decode(token, Rails.application.credentials.secret_key_base || ENV['SECRET_KEY_BASE'])
+        @current_user = User.find(decoded_token[0]['user_id'])
+      rescue JWT::DecodeError
+        render json: { error: 'Invalid token' }, status: :unauthorized
+      rescue ActiveRecord::RecordNotFound
+        render json: { error: 'User not found' }, status: :unauthorized
       end
     end
   end
