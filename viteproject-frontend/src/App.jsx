@@ -10,7 +10,6 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/users" element={<Users />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/auth/google_oauth2/callback" element={<Login />} />
       </Routes>
     </BrowserRouter>
   );

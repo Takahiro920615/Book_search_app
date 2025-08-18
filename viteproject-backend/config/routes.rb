@@ -6,15 +6,10 @@ Rails.application.routes.draw do
     omniauth_callbacks: 'users/omniauth_callbacks'
   }, path_names: {
     sign_in: 'sign_in',
-    # sign_out: 'sign_out',
+    sign_out: 'sign_out',
     sign_up: '',
     registration: 'sign_up'
   }
-  
-  devise_scope :user do
-    get 'api/auth/:provider/callback', to: 'users/omniauth_callbacks#google_oauth2'
-  end
-
   # テスト用ルート
   get '/test', to: 'test#index'
 

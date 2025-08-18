@@ -8,6 +8,7 @@ class Users::OmniauthCallbacksController < ApplicationController
     @user = User.from_omniauth(request.env['omniauth.auth'])
     if @user.persisted?
       token = generate_jwt_token(@user)
+      Rails.logger.info "Generated token: #{token}"
       redirect_to "http://localhost:5173/users?token=#{token}", allow_other_host: true
     else
       redirect_to "http://localhost:5173/login?error=auth_failed", allow_other_host: true

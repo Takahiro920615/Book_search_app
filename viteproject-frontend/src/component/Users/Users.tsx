@@ -1,6 +1,6 @@
 // src/Users.tsx
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation} from 'react-router-dom';
 import axios from 'axios';
 import './Users.css';
 
@@ -14,57 +14,69 @@ function Users() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
+    console.log('Users.tsx: Current pathname:', location.pathname); // デバッグ用
+    console.log('Users.tsx: Query params:', window.location.search); // デバッグ用
+
     const fetchUserData = async () => {
-      const token = localStorage.getItem('token'); // Googleログイン後もここに格納
+      const token = localStorage.getItem('token');
       if (!token) {
         setMessage('No token found, please log in.');
-        navigate('/');
+        console.error('No token in localStorage');
+        navigate('/', { replace: true });
         return;
       }
-  
+
       try {
-        const response = await axios.get('/api/user', {
+        console.log('Sending token:', token);
+        const response = await axios.get('http://localhost:3000/api/user', {
           headers: {
-            Authorization: `Bearer ${token}`, // ← ★ ここに "Bearer " を追加
+            Authorization: token,
             'Content-Type': 'application/json',
             'Accept': 'application/json',
           },
         });
-  
+
         console.log('User data:', response.data);
         setUserData(response.data);
         setMessage('User data loaded successfully!');
       } catch (error: any) {
         console.error('User data error:', error.response || error);
         setMessage(`Failed to load user data: ${error.response?.data?.error || error.message}`);
-  
-        if (error.response?.status === 401) {
-          localStorage.removeItem('token');
-          navigate('/');
+        if (error.response?.status === 302) {
+          console.error('Redirect detected:', error.response.headers.location);
+          setMessage(`Redirected to: ${error.response.headers.location}`);
         }
       }
     };
-  
+
     fetchUserData();
-  }, [navigate]);
+  }, [navigate, location.pathname, location.search]); // location.search を追加
 
   const handleLogout = async () => {
     const token = localStorage.getItem('token');
-  
+    if (!token) {
+      setMessage('No token found, please log in.');
+      navigate('/', { replace: true });
+      return;
+    }
+
     try {
       await axios.delete('http://localhost:3000/api/sign_out', {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: token,
           'Content-Type': 'application/json',
-          Accept: 'application/json',
+          'Accept': 'application/json',
         },
       });
       localStorage.removeItem('token');
-      navigate('/login');
-    } catch (error) {
-      console.error('Logout error:', error);
+      setMessage('Logout successful!');
+      navigate('/', { replace: true });
+    } catch (error: any) {
+      console.error('Logout error:', error.response || error);
+      setMessage(`Logout failed: ${error.response?.data?.error || error.message}`);
     }
   };
 

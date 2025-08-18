@@ -1,6 +1,6 @@
 // src/Login.jsx
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';
 
@@ -10,25 +10,42 @@ function Login() {
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    sessionStorage.removeItem('oauth_redirect_done'); // テスト用に毎回リセット
+    console.log('Login.tsx: Current pathname:', location.pathname);
+    console.log('Login.tsx: Query params:', window.location.search);
+
+    // / または /users パスでトークン処理
+    if (!['/', '/users'].includes(location.pathname)) {
+      console.log('Login.tsx: Skipping useEffect for pathname:', location.pathname);
+      return;
+    }
+
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
     const error = urlParams.get('error');
-  
     const hasRedirected = sessionStorage.getItem('oauth_redirect_done');
-  
+
+    console.log('Login.tsx: Token from query:', token);
+    console.log('Login.tsx: hasRedirected:', hasRedirected);
+
     if (token && !hasRedirected) {
-      localStorage.setItem('token', token);
-      sessionStorage.setItem('oauth_redirect_done', 'true'); // ← フラグを保存
+      localStorage.setItem('token', `Bearer ${token}`);
+      console.log('Login.tsx: Saved token:', localStorage.getItem('token'));
+      sessionStorage.setItem('oauth_redirect_done', 'true');
       window.history.replaceState(null, '', '/users');
-      navigate('/users');
+      navigate('/users', { replace: true });
     } else if (error && !hasRedirected) {
       setMessage(`Googleログインエラー: ${decodeURIComponent(error)}`);
-      sessionStorage.setItem('oauth_redirect_done', 'true'); // エラーでも一度だけ
+      sessionStorage.setItem('oauth_redirect_done', 'true');
+      navigate('/', { replace: true });
+    } else if (!token && !error && location.pathname === '/users') {
+      setMessage('No token provided in URL, please log in.');
+      console.error('Login.tsx: No token in query params for /users');
+      navigate('/', { replace: true });
     }
-  }, [navigate]);
+  }, [navigate, location.pathname, location.search]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,17 +61,17 @@ function Login() {
         },
         withCredentials: true,
       });
-  
+
       const { token } = response.data;
       if (!token) {
         setMessage('No token received in response!');
         return;
       }
-  
+
       localStorage.setItem('token', `Bearer ${token}`);
+      console.log('Login.tsx: Saved token:', localStorage.getItem('token'));
       setMessage('Login successful!');
-      console.log('Token saved:', token);
-      navigate('/users');
+      navigate('/users', { replace: true });
     } catch (error) {
       setMessage(`Login failed: ${error.response?.data?.error || error.message}`);
       console.error('Login error:', error.response || error);
@@ -81,7 +98,7 @@ function Login() {
       setEmail('');
       setPassword('');
       setMessage('Logout successful!');
-      navigate('/');
+      navigate('/', { replace: true });
     } catch (error) {
       setMessage(`Logout failed: ${error.response?.data?.error || error.message}`);
       console.error('Logout error:', error.response || error);
@@ -117,7 +134,7 @@ function Login() {
     if (isSubmitting) return;
     setIsSubmitting(true);
     console.log('Starting Google OAuth flow');
-    window.location.href = 'http://localhost:3000/api/auth/google_oauth2'; // リダイレクト方式
+    window.location.href = 'http://localhost:3000/api/auth/google_oauth2';
   };
 
   return (

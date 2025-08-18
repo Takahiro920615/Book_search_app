@@ -14,20 +14,33 @@ class Users::SessionsController < Devise::SessionsController
   end
   
   def destroy
-    # APIではサーバー側でセッションを持たないので、フロントでトークン削除すればOK
-    # JWTブラックリストを使う場合はここで無効化処理
-    head :no_content
+    token = request.headers['Authorization']&.sub(/^Bearer /, '') || ''
+    if token.blank?
+      return render json: { error: 'No token provided' }, status: :unprocessable_entity
+    end
+
+    begin
+      payload = JWT.decode(token, ENV['SECRET_KEY_BASE'] || Rails.application.credentials.secret_key_base, true, algorithm: 'HS256').first
+      user = User.find_by(id: payload['sub'])
+      if user
+        # トークンを無効化（例: ブラックリストに追加する場合はここにロジック）
+        render json: { message: 'Logged out successfully' }, status: :ok
+      else
+        render json: { error: 'User not found' }, status: :unprocessable_entity
+      end
+    rescue JWT::DecodeError => e
+      render json: { error: "Invalid token: #{e.message}" }, status: :unprocessable_entity
+    end
   end
 
   private
 
   def generate_jwt_token(user)
-    payload = {
-      user_id: user.id,
-      exp: (Time.now + 24.hours).to_i # 24時間後に期限切れ
-    }
-    secret_key = Rails.application.credentials.secret_key_base || ENV['SECRET_KEY_BASE']
-    JWT.encode(payload, secret_key)
+    JWT.encode(
+      { sub: user.id, scp: 'user', iat: Time.now.to_i, exp: Time.now.to_i + 24 * 3600 }, # ← 修正: sub を使用
+      ENV['SECRET_KEY_BASE'] || Rails.application.credentials.secret_key_base,
+      'HS256'
+    )
   end
 
   def auth_options

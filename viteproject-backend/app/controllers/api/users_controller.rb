@@ -21,17 +21,21 @@ module Api
 
     # 認証失敗時のカスタムレスポンス
     def authenticate_user!
-      header = request.headers['Authorization']
-      token = header&.split(' ')&.last
-      return render json: { error: 'Token missing' }, status: :unauthorized unless token
-    
+      token = request.headers['Authorization']&.sub(/^Bearer /, '') || ''
+      if token.blank?
+        return render json: { error: 'No token provided' }, status: :unauthorized
+      end
+  
       begin
-        decoded_token = JWT.decode(token, Rails.application.credentials.secret_key_base || ENV['SECRET_KEY_BASE'])
-        @current_user = User.find(decoded_token[0]['user_id'])
-      rescue JWT::DecodeError
-        render json: { error: 'Invalid token' }, status: :unauthorized
-      rescue ActiveRecord::RecordNotFound
-        render json: { error: 'User not found' }, status: :unauthorized
+        payload = JWT.decode(token, ENV['SECRET_KEY_BASE'] || Rails.application.credentials.secret_key_base, true, algorithm: 'HS256').first
+        @current_user = User.find_by(id: payload['sub'])
+        if @current_user.nil?
+          render json: { error: 'User not found' }, status: :unauthorized
+        end
+      rescue JWT::ExpiredSignature
+        render json: { error: 'Token expired' }, status: :unauthorized
+      rescue JWT::DecodeError => e
+        render json: { error: "Invalid token: #{e.message}" }, status: :unauthorized
       end
     end
   end
