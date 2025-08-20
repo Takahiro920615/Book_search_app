@@ -58,11 +58,11 @@ function Users() {
   const handleLogout = async () => {
     const token = localStorage.getItem('token');
     if (!token) {
-      setMessage('No token found, please log in.');
+      setMessage('トークンがありません。ログインしてください。');
       navigate('/', { replace: true });
       return;
     }
-
+  
     try {
       await axios.delete('http://localhost:3000/api/sign_out', {
         headers: {
@@ -70,13 +70,20 @@ function Users() {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
+        withCredentials: true, // CSRF トークンが必要な場合
       });
       localStorage.removeItem('token');
-      setMessage('Logout successful!');
+      setMessage('ログアウトしました！');
       navigate('/', { replace: true });
     } catch (error: any) {
-      console.error('Logout error:', error.response || error);
-      setMessage(`Logout failed: ${error.response?.data?.error || error.message}`);
+      console.error('ログアウトエラー:', error.response || error);
+      setMessage(`ログアウトに失敗しました: ${error.response?.data?.error || error.message}`);
+      // 401 や 422 の場合、トークンを削除してリダイレクト
+      if (error.response?.status === 401 || error.response?.status === 422) {
+        localStorage.removeItem('token');
+        setMessage('トークンが無効です。ログイン画面に戻ります。');
+        navigate('/', { replace: true });
+      }
     }
   };
 
