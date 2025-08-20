@@ -16,19 +16,27 @@ function Login() {
     console.log('Login.tsx: Current pathname:', location.pathname);
     console.log('Login.tsx: Query params:', window.location.search);
 
-    // / または /users パスでトークン処理
-    if (!['/', '/users'].includes(location.pathname)) {
-      console.log('Login.tsx: Skipping useEffect for pathname:', location.pathname);
-      return;
-    }
-
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
     const error = urlParams.get('error');
+    const message = urlParams.get('message'); // クエリパラメータからメッセージを取得
     const hasRedirected = sessionStorage.getItem('oauth_redirect_done');
 
     console.log('Login.tsx: Token from query:', token);
     console.log('Login.tsx: hasRedirected:', hasRedirected);
+    console.log('Login.tsx: Message from query:', message);
+
+    // クエリパラメータのメッセージを UI に反映
+    if (message) {
+      setMessage(decodeURIComponent(message));
+      // メッセージ表示後、クエリパラメータをクリア
+      window.history.replaceState(null, '', '/');
+    }
+
+    if (!['/', '/users'].includes(location.pathname)) {
+      console.log('Login.tsx: Skipping useEffect for pathname:', location.pathname);
+      return;
+    }
 
     if (token && !hasRedirected) {
       localStorage.setItem('token', `Bearer ${token}`);
@@ -41,7 +49,7 @@ function Login() {
       sessionStorage.setItem('oauth_redirect_done', 'true');
       navigate('/', { replace: true });
     } else if (!token && !error && location.pathname === '/users') {
-      setMessage('No token provided in URL, please log in.');
+      setMessage('トークンがありません。ログインしてください。');
       console.error('Login.tsx: No token in query params for /users');
       navigate('/', { replace: true });
     }
@@ -64,16 +72,16 @@ function Login() {
 
       const { token } = response.data;
       if (!token) {
-        setMessage('No token received in response!');
+        setMessage('トークンが受信できませんでした！');
         return;
       }
 
       localStorage.setItem('token', `Bearer ${token}`);
       console.log('Login.tsx: Saved token:', localStorage.getItem('token'));
-      setMessage('Login successful!');
+      setMessage('ログインしました！');
       navigate('/users', { replace: true });
     } catch (error) {
-      setMessage(`Login failed: ${error.response?.data?.error || error.message}`);
+      setMessage(`ログインに失敗しました: ${error.response?.data?.error || error.message}`);
       console.error('Login error:', error.response || error);
     } finally {
       setIsSubmitting(false);
@@ -85,7 +93,7 @@ function Login() {
     setIsSubmitting(true);
     const token = localStorage.getItem('token');
     if (!token) {
-      setMessage('No token found, already logged out!');
+      setMessage('トークンがありません。既にログアウトしています！');
       setIsSubmitting(false);
       return;
     }
@@ -97,10 +105,10 @@ function Login() {
       localStorage.removeItem('token');
       setEmail('');
       setPassword('');
-      setMessage('Logout successful!');
+      setMessage('ログアウトしました！');
       navigate('/', { replace: true });
     } catch (error) {
-      setMessage(`Logout failed: ${error.response?.data?.error || error.message}`);
+      setMessage(`ログアウトに失敗しました: ${error.response?.data?.error || error.message}`);
       console.error('Logout error:', error.response || error);
     } finally {
       setIsSubmitting(false);
@@ -112,7 +120,7 @@ function Login() {
     setIsSubmitting(true);
     const token = localStorage.getItem('token');
     if (!token) {
-      setMessage('No token found!');
+      setMessage('トークンがありません！');
       setIsSubmitting(false);
       return;
     }
@@ -120,10 +128,10 @@ function Login() {
       const response = await axios.get('http://localhost:3000/api/protected', {
         headers: { Authorization: token },
       });
-      setMessage(`Protected response: ${JSON.stringify(response.data)}`);
+      setMessage(`保護されたエンドポイントの応答: ${JSON.stringify(response.data)}`);
       console.log(response.data);
     } catch (error) {
-      setMessage(`Protected request failed: ${error.response?.data?.error || error.message}`);
+      setMessage(`保護されたリクエストに失敗しました: ${error.response?.data?.error || error.message}`);
       console.error('Protected error:', error.response || error);
     } finally {
       setIsSubmitting(false);
