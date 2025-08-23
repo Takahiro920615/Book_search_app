@@ -9,7 +9,15 @@ class Users::OmniauthCallbacksController < ApplicationController
     if @user.persisted?
       token = generate_jwt_token(@user)
       Rails.logger.info "Generated token: #{token}"
-      redirect_to "http://localhost:5173/users?token=#{token}", allow_other_host: true
+      # HTTP-onlyクッキーにトークンをセット	
+        cookies[:auth_token] = {	
+          value: token,	
+          httponly: false, # JavaScriptからアクセス可	
+          secure: Rails.env.production?, # 本番ではHTTPS必須	
+          same_site: :lax, # CSRF対策	
+          expires: 1.hour.from_now	
+          }
+          redirect_to "http://localhost:5173/users", allow_other_host: true
     else
       redirect_to "http://localhost:5173/login?error=auth_failed", allow_other_host: true
     end

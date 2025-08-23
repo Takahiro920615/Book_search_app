@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import Cookies from 'js-cookie'; // クッキー操作用ライブラリ
 import './Login.css';
 
 function Login() {
@@ -15,43 +16,61 @@ function Login() {
   useEffect(() => {
     console.log('Login.tsx: Current pathname:', location.pathname);
     console.log('Login.tsx: Query params:', window.location.search);
-
+  
     const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
     const error = urlParams.get('error');
-    const message = urlParams.get('message'); // クエリパラメータからメッセージを取得
+    const message = urlParams.get('message');
     const hasRedirected = sessionStorage.getItem('oauth_redirect_done');
-
-    console.log('Login.tsx: Token from query:', token);
+  
     console.log('Login.tsx: hasRedirected:', hasRedirected);
     console.log('Login.tsx: Message from query:', message);
-
-    // クエリパラメータのメッセージを UI に反映
+  
     if (message) {
       setMessage(decodeURIComponent(message));
-      // メッセージ表示後、クエリパラメータをクリア
       window.history.replaceState(null, '', '/');
     }
-
+  
     if (!['/', '/users'].includes(location.pathname)) {
       console.log('Login.tsx: Skipping useEffect for pathname:', location.pathname);
       return;
     }
-
-    if (token && !hasRedirected) {
-      localStorage.setItem('token', `Bearer ${token}`);
-      console.log('Login.tsx: Saved token:', localStorage.getItem('token'));
-      sessionStorage.setItem('oauth_redirect_done', 'true');
-      window.history.replaceState(null, '', '/users');
-      navigate('/users', { replace: true });
-    } else if (error && !hasRedirected) {
-      setMessage(`Googleログインエラー: ${decodeURIComponent(error)}`);
-      sessionStorage.setItem('oauth_redirect_done', 'true');
-      navigate('/', { replace: true });
-    } else if (!token && !error && location.pathname === '/users') {
-      setMessage('トークンがありません。ログインしてください。');
-      console.error('Login.tsx: No token in query params for /users');
-      navigate('/', { replace: true });
+  
+    const checkToken = () => {
+      const token = Cookies.get('auth_token');
+      console.log('Login.tsx: Token from cookie:', token);
+  
+      if (token && !hasRedirected) {
+        localStorage.setItem('token', `Bearer ${token}`);
+        console.log('Login.tsx: Saved token:', localStorage.getItem('token'));
+        sessionStorage.setItem('oauth_redirect_done', 'true');
+        Cookies.remove('auth_token');
+        window.history.replaceState(null, '', '/users');
+        navigate('/users', { replace: true });
+      } else if (error && !hasRedirected) {
+        setMessage(`Googleログインエラー: ${decodeURIComponent(error)}`);
+        sessionStorage.setItem('oauth_redirect_done', 'true');
+        navigate('/', { replace: true });
+      } else if (!token && !error && location.pathname === '/users') {
+        setMessage('トークンがありません。ログインしてください。');
+        console.error('Login.tsx: No token in cookie for /users');
+        navigate('/', { replace: true });
+      }
+    };
+  
+    // 初回チェック
+    checkToken();
+  
+    // クッキーが遅れてセットされる場合に備え、ポーリング
+    if (!hasRedirected && location.pathname === '/users') {
+      const interval = setInterval(() => {
+        const token = Cookies.get('auth_token');
+        if (token || sessionStorage.getItem('oauth_redirect_done')) {
+          clearInterval(interval);
+          checkToken();
+        }
+      }, 500);
+      // 5秒後にポーリング終了
+      setTimeout(() => clearInterval(interval), 5000);
     }
   }, [navigate, location.pathname, location.search]);
 
@@ -77,7 +96,7 @@ function Login() {
       }
 
       localStorage.setItem('token', `Bearer ${token}`);
-      console.log('Login.tsx: Saved token:', localStorage.getItem('token'));
+      console.log('Login.jsx: Saved token:', localStorage.getItem('token'));
       setMessage('ログインしました！');
       navigate('/users', { replace: true });
     } catch (error) {
@@ -110,29 +129,6 @@ function Login() {
     } catch (error) {
       setMessage(`ログアウトに失敗しました: ${error.response?.data?.error || error.message}`);
       console.error('Logout error:', error.response || error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const testAuth = async () => {
-    if (isSubmitting) return;
-    setIsSubmitting(true);
-    const token = localStorage.getItem('token');
-    if (!token) {
-      setMessage('トークンがありません！');
-      setIsSubmitting(false);
-      return;
-    }
-    try {
-      const response = await axios.get('http://localhost:3000/api/protected', {
-        headers: { Authorization: token },
-      });
-      setMessage(`保護されたエンドポイントの応答: ${JSON.stringify(response.data)}`);
-      console.log(response.data);
-    } catch (error) {
-      setMessage(`保護されたリクエストに失敗しました: ${error.response?.data?.error || error.message}`);
-      console.error('Protected error:', error.response || error);
     } finally {
       setIsSubmitting(false);
     }
@@ -177,7 +173,7 @@ function Login() {
           <button onClick={handleGoogleLogin} disabled={isSubmitting}>Login with Google</button>
         </form>
         <div className="button-group">
-          <button onClick={testAuth} className="secondary-button" disabled={isSubmitting}>Test Protected Endpoint</button>
+          <button onClick={() => testAuth()} className="secondary-button" disabled={isSubmitting}>Test Protected Endpoint</button>
           <button onClick={handleLogout} className="secondary-button" disabled={isSubmitting}>Logout</button>
         </div>
         {message && <p className="message">{message}</p>}

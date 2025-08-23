@@ -1,6 +1,6 @@
 // src/Users.tsx
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation} from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './Users.css';
 
@@ -17,15 +17,15 @@ function Users() {
   const location = useLocation();
 
   useEffect(() => {
-    console.log('Users.tsx: Current pathname:', location.pathname); // デバッグ用
-    console.log('Users.tsx: Query params:', window.location.search); // デバッグ用
+    console.log('Users.tsx: Current pathname:', location.pathname);
+    console.log('Users.tsx: Query params:', window.location.search);
 
     const fetchUserData = async () => {
       const token = localStorage.getItem('token');
       if (!token) {
-        setMessage('No token found, please log in.');
+        setMessage('トークンがありません。ログインしてください。');
         console.error('No token in localStorage');
-        navigate('/', { replace: true });
+        navigate('/?message=ログインが必要です', { replace: true });
         return;
       }
 
@@ -37,32 +37,33 @@ function Users() {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
           },
+          withCredentials: true, // クッキーを送信
         });
 
         console.log('User data:', response.data);
         setUserData(response.data);
-        setMessage('User data loaded successfully!');
+        setMessage('ユーザー情報を取得しました！');
       } catch (error: any) {
         console.error('User data error:', error.response || error);
-        setMessage(`Failed to load user data: ${error.response?.data?.error || error.message}`);
-        if (error.response?.status === 302) {
-          console.error('Redirect detected:', error.response.headers.location);
-          setMessage(`Redirected to: ${error.response.headers.location}`);
+        setMessage(`ユーザー情報の取得に失敗しました: ${error.response?.data?.error || error.message}`);
+        if ([401, 422].includes(error.response?.status)) {
+          localStorage.removeItem('token');
+          navigate('/?message=トークンが無効です。再度ログインしてください。', { replace: true });
         }
       }
     };
 
     fetchUserData();
-  }, [navigate, location.pathname, location.search]); // location.search を追加
+  }, [navigate, location.pathname]);
 
   const handleLogout = async () => {
     const token = localStorage.getItem('token');
     if (!token) {
       setMessage('トークンがありません。ログインしてください。');
-      navigate('/', { replace: true });
+      navigate('/?message=ログインが必要です', { replace: true });
       return;
     }
-  
+
     try {
       await axios.delete('http://localhost:3000/api/sign_out', {
         headers: {
@@ -70,17 +71,17 @@ function Users() {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
-        withCredentials: true, // CSRF トークンが必要な場合
+        withCredentials: true,
       });
       localStorage.removeItem('token');
-      navigate('/?message=ログアウトしました！', { replace: true });
+      setMessage('ログアウトしました！');
+      navigate('/?message=ログアウトしました', { replace: true });
     } catch (error: any) {
       console.error('ログアウトエラー:', error.response || error);
       setMessage(`ログアウトに失敗しました: ${error.response?.data?.error || error.message}`);
-      // 401 や 422 の場合、トークンを削除してリダイレクト
       if ([401, 422, 500].includes(error.response?.status)) {
         localStorage.removeItem('token');
-        navigate(`/?message=トークンが無効です。ログイン画面に戻ります。`, { replace: true });
+        navigate('/?message=トークンが無効です。ログイン画面に戻ります。', { replace: true });
       }
     }
   };
