@@ -15,14 +15,23 @@ class User < ApplicationRecord
          # Google認証を処理するように指示する
          omniauth_providers: [:google_oauth2],
         #  JWTベースの認証を有効化
-         jwt_revocation_strategy: Devise::JWT::RevocationStrategies::Null
+         jwt_revocation_strategy: JwtDenylist
   
          def self.from_omniauth(auth)
-          Rails.logger.info("User.from_omniauth auth: #{auth.inspect}") # デバッグ用
-          where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
-            user.email = auth.info.email
-            user.password = Devise.friendly_token[0, 20]
-            # 必要に応じて他の属性を設定（例：user.name = auth.info.name）
+          Rails.logger.info "User.from_omniauth auth: #{auth.inspect}"
+          return nil unless auth&.info # authがnilまたはinfoがない場合はnilを返す
+      
+          user = where(provider: auth.provider, uid: auth.uid).first_or_create do |u|
+            u.email = auth.info.email
+            u.password = Devise.friendly_token[0, 20]
+            u.name = auth.info.name if auth.info.name # 名前をオプションで設定
           end
-  end
-end
+      
+          if user.persisted?
+            user
+          else
+            Rails.logger.error "Failed to create or find user: #{user.errors.full_messages}"
+            nil
+          end
+        end
+      end

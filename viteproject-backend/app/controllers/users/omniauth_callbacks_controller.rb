@@ -1,15 +1,17 @@
 # app/controllers/users/omniauth_callbacks_controller.rb
-class Users::OmniauthCallbacksController < ApplicationController
+class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   skip_before_action :verify_authenticity_token, only: [:google_oauth2], raise: false
 
   def google_oauth2
     Rails.logger.info "OAuth2 callback received: params=#{params.inspect}"
     Rails.logger.info "OmniAuth auth: #{request.env['omniauth.auth']&.info&.email || 'no user'}"
     @user = User.from_omniauth(request.env['omniauth.auth'])
-    if @user.persisted?
-      token = generate_jwt_token(@user)
-      Rails.logger.info "Generated token: #{token}"
-      # HTTP-onlyクッキーにトークンをセット	
+    if @user&.persisted?	
+      token = Users::SessionsController.new.send(:generate_jwt_token, @user)	
+      Rails.logger.info "Generated token: #{token}"	
+      # トークンをデコードして jti が含まれているか確認（デバッグ用）	# HTTP-onlyクッキーにトークンをセット
+      decoded = JWT.decode(token, ENV['SECRET_KEY_BASE'] || Rails.application.credentials.secret_key_base, true, { algorithm: 'HS256' })	
+      Rails.logger.info "Decoded token payload: #{decoded[0].inspect}"
         cookies[:auth_token] = {	
           value: token,	
           httponly: false, # JavaScriptからアクセス可	
@@ -19,6 +21,7 @@ class Users::OmniauthCallbacksController < ApplicationController
           }
           redirect_to "http://localhost:5173/users", allow_other_host: true
     else
+      Rails.logger.error "User authentication failed: #{@user&.errors&.full_messages || 'No user returned'}"
       redirect_to "http://localhost:5173/login?error=auth_failed", allow_other_host: true
     end
   end
@@ -36,15 +39,5 @@ class Users::OmniauthCallbacksController < ApplicationController
     Rails.logger.info("Custom passthru called with provider: #{params[:provider]}")
     Rails.logger.info("OmniAuth strategy: #{request.env['omniauth.strategy']&.inspect}")
     super # Deviseのpassthruを呼び出し
-  end
-
-  private
-
-  def generate_jwt_token(user)
-    JWT.encode(
-      { sub: user.id, scp: 'user', iat: Time.now.to_i, exp: Time.now.to_i + 3600 },
-      ENV['SECRET_KEY_BASE'] || Rails.application.credentials.secret_key_base,
-      'HS256'
-    )
   end
 end
