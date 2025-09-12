@@ -24,25 +24,41 @@ class Users::SessionsController < Devise::SessionsController
       return
     end
 
-
     begin
       decoded = JWT.decode(token, ENV['SECRET_KEY_BASE'] || Rails.application.credentials.secret_key_base, true, { algorithm: 'HS256' })
-      jti=decoded[0]['jti']
+      jti = decoded[0]['jti']
       raise JWT::InvalidJtiError, 'Missing jti' unless jti
-      JwtDenylist.create!(jti: jti, exp:Time.at(decoded[0]['exp']))
-      sign_out(current_user) if current_user	
-      Rails.logger.info "User signed out successfully: #{decoded[0]['sub']}"
 
-      # Deviseのセッションをクリア（必要に応じて）
-      # Google ログアウト用の URL（OmniAuth ユーザー向け）	
-      google_logout_url = 'https://accounts.google.com/logout?continue=' + root_url	
-      render json: { message: 'ログアウトしました', google_logout_url: google_logout_url }, status: :ok
-      rescue JWT::InvalidJtiError => e
-      Rails.logger.error "Database error in logout: #{e.message}"
-      render json: { error: 'ログアウト処理中にデータベースエラーが発生しました' }, status: :internal_server_error
+      # JWTをdenylistに追加
+      JwtDenylist.create!(jti: jti, exp: Time.at(decoded[0]['exp']))
+
+      # ユーザーをサインアウト（current_userが存在する場合）
+      if current_user
+        sign_out(current_user)
+        Rails.logger.info "User signed out successfully: #{current_user.id}"
+      end
+
+      # リダイレクトURL（フロントエンドのログインページ）
+      frontend_url = 'http://localhost:5173/'  # 環境変数で管理推奨: ENV['FRONTEND_URL'] || 'http://localhost:5173/'
+
+      # Googleユーザー向けログアウトURL（OmniAuthの場合のみ）
+      google_logout_url = nil
+      if current_user&.provider == 'google_oauth2'
+        google_logout_url = "https://accounts.google.com/logout?continue=#{frontend_url}"
+      end
+
+      render json: {
+        message: 'ログアウトしました',
+        redirect_url: frontend_url,
+        google_logout_url: google_logout_url
+      }, status: :ok
+
     rescue JWT::DecodeError => e
       Rails.logger.error "Invalid token for sign out: #{e.message}"
       render json: { error: "無効なトークン: #{e.message}" }, status: :unauthorized
+    rescue JWT::InvalidJtiError => e
+      Rails.logger.error "Database error in logout: #{e.message}"
+      render json: { error: 'ログアウト処理中にデータベースエラーが発生しました' }, status: :internal_server_error
     rescue StandardError => e
       Rails.logger.error "Sign out error: #{e.message}, Backtrace: #{e.backtrace.join('\n')}"
       render json: { error: "サーバーエラー: #{e.message}" }, status: :internal_server_error

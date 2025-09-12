@@ -17,7 +17,6 @@ Rails.application.routes.draw do
   namespace :api do
     # post 'sign_in', to: 'sessions#create'
     # post 'sign_up', to: 'registrations#create'
-    delete 'sign_out', to: 'sessions#destroy'
     get 'user', to: 'users#show'
     get 'protected', to: 'users#protected'
   end
