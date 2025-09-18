@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './Users.css';
+import Icon from '../Users/icon';
 
 interface UserData {
   id: number;
@@ -13,6 +14,7 @@ interface UserData {
 function Users() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [message, setMessage] = useState('');
+  const [imageUrl, setImageUrl] = useState<string>('/no_image.png');
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -56,6 +58,22 @@ function Users() {
     fetchUserData();
   }, [navigate, location.pathname]);
 
+  // Load persisted image after user data is available
+  useEffect(() => {
+    if (!userData?.email) return;
+    try {
+      const key = `userImage:${userData.email}`;
+      const saved = localStorage.getItem(key);
+      if (saved) {
+        setImageUrl(saved);
+      } else {
+        setImageUrl('/no_image.png');
+      }
+    } catch (e) {
+      console.error('Failed to load image from localStorage', e);
+    }
+  }, [userData?.email]);
+
   const handleLogout = async () => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -93,6 +111,27 @@ function Users() {
         {userData ? (
           <div className="user-info">
             <p className="welcome-text">Welcome, {userData.email || 'User'}!</p>
+            <img src={imageUrl} alt="User" className="user-image" />
+            <Icon
+              buttonLabel="画像を選択"
+              onSelect={(_, file) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                  const dataUrl = typeof reader.result === 'string' ? reader.result : '';
+                  if (!dataUrl) return;
+                  setImageUrl(dataUrl);
+                  try {
+                    if (userData?.email) {
+                      const key = `userImage:${userData.email}`;
+                      localStorage.setItem(key, dataUrl);
+                    }
+                  } catch (e) {
+                    console.error('Failed to save image to localStorage', e);
+                  }
+                };
+                reader.readAsDataURL(file);
+              }}
+            />
             <p className="text-gray-600">User ID: {userData.id}</p>
             <p className="text-gray-600">Last Login: {userData.last_login || 'N/A'}</p>
           </div>

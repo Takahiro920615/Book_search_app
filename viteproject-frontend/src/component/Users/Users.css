@@ -25,6 +25,15 @@
   margin-bottom: 1.5rem;
 }
 
+.user-image {
+  display: block;
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin: 0.5rem auto 1rem;
+}
+
 .welcome-text {
   font-size: 1.2rem;
   color: #333;
