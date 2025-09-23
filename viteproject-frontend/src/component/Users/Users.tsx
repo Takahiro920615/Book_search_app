@@ -5,6 +5,7 @@ import axios from 'axios';
 import './Users.css';
 import Icon from '../Users/icon';
 
+
 interface UserData {
   id: number;
   email: string;
@@ -104,6 +105,11 @@ function Users() {
     }
   };
 
+  
+  const goToBooks = () => {
+    navigate('/books')
+  }
+
   return (
     <div className="users-container">
       <div className="users-box">
@@ -132,6 +138,7 @@ function Users() {
                 reader.readAsDataURL(file);
               }}
             />
+
             <p className="text-gray-600">User ID: {userData.id}</p>
             <p className="text-gray-600">Last Login: {userData.last_login || 'N/A'}</p>
           </div>
@@ -139,6 +146,7 @@ function Users() {
           <p className="loading-text">Loading user data...</p>
         )}
         <div className="button-group">
+         <button onClick={goToBooks}>本一覧ページ</button>
           <button onClick={handleLogout} className="logout-button">
             Logout
           </button>
