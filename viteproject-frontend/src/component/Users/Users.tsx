@@ -107,8 +107,12 @@ function Users() {
 
   
   const goToBooks = () => {
-    navigate('/books')
-  }
+    if (userData?.id) {
+      navigate(`/users/${userData.id}/books`);
+    }else{
+      setMessage('ユーザー情報を取得できませんでした');
+    }
+  };
 
   return (
     <div className="users-container">
