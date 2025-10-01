@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  has_many :favorites, dependent: :destroy
+
   devise :database_authenticatable, 
         # メール・パスワードでログイン認証
          :registerable,

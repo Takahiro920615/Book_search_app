@@ -15,6 +15,9 @@ Rails.application.routes.draw do
 
   # API名前空間
   namespace :api do
+    namespace :v1 do
+      resources :favorites, only: [:index, :create, :destroy], param: :book_id
+    end
     # post 'sign_in', to: 'sessions#create'
     # post 'sign_up', to: 'registrations#create'
     get 'user', to: 'users#show'
