@@ -1,0 +1,44 @@
+/* Minimal layout helpers to mirror the Tailwind classes used in the TSX pages.
+   This keeps each routed page stretched to the viewport height even without the full Tailwind build. */
+
+/* Ensure every rendered route occupies the full viewport height */
+#root > * {
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Tailwind-like fallbacks for height utilities used in components */
+:where(.min-h-screen) {
+  min-height: 100vh;
+}
+
+:where(.h-screen) {
+  height: 100vh;
+}
+
+:where(.flex-1) {
+  flex: 1 1 0%;
+}
+
+/* Grid layout fallbacks */
+:where(.grid) {
+  display: grid;
+}
+
+:where(.grid-cols-5) {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+:where(.gap-8) {
+  gap: 2rem;
+}
+
+:where(.w-full) {
+  width: 100%;
+}
+
+:where(.px-8) {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+

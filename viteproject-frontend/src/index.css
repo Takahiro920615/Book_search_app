@@ -1,18 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
-
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
+  --app-text-color: rgba(255, 255, 255, 0.87);
+  --app-body-bg: #242424;
+  color: var(--app-text-color);
+  background-color: var(--app-body-bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+}
+
+#root { 
+  min-height: 100vh;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  color: var(--app-text-color);
+  background-color: var(--app-body-bg);
+}
+
+#root {
+  flex: 1 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 a {
@@ -22,14 +48,6 @@ a {
 }
 a:hover {
   color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
 }
 
 h1 {
@@ -58,8 +76,10 @@ button:focus-visible {
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    --app-text-color: #213547;
+    --app-body-bg: #ffffff;
+    color: var(--app-text-color);
+    background-color: var(--app-body-bg);
   }
   a:hover {
     color: #747bff;
