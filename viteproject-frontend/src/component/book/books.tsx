@@ -272,8 +272,8 @@ useEffect(() => {
   };
 
   return (
-    <div className="luxury-books-container">
-        <h1 className="text-5xl md:text-6xl font-bold text-center mb-4 tracking-tight">
+    <div className="luxury-books-container min-h-screen">
+        <h1 className="text-5xl pt-16 md:text-6xl font-bold text-center mb-4 tracking-tight">
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-200 to-amber-400">
             至高の蔵書
           </span>
@@ -282,18 +282,8 @@ useEffect(() => {
           あなたの選ぶ、極上の1冊
         </p>
 
-        {!user ? (
-          <div className="flex justify-center">
-            <GoogleAuth onSuccess={handleAuthSuccess} />
-          </div>
-        ) : (
-          <p className="text-center text-amber-100 mb-8">
-            ようこそ、<span className="font-semibold text-amber-300">{user.name}</span> さん
-          </p>
-        )}
-
         {/* タブ */}
-        <div className="flex justify-center gap-6 mb-12 flex-wrap">
+        <div className="flex justify-center gap-2 pt-8  mb-6 flex-wrap">
           <button
             onClick={() => setActiveSection('new')}
             className={`px-8 py-4 rounded-full text-lg font-medium transition-all ${activeSection === 'new' ? 'luxury-tab-active shadow-2xl' : 'bg-slate-800/50 hover:bg-slate-700/70'}`}
@@ -410,8 +400,18 @@ useEffect(() => {
             <p className="text-2xl text-amber-300 animate-pulse">古書店を探しています...</p>
           </div>
         )}
-      
+
+        {!user ? (
+          <div className="flex justify-center pt-20">
+            <GoogleAuth onSuccess={handleAuthSuccess} />
+          </div>
+        ) : (
+          <p className="text-center text-amber-100 mb-8">
+            ようこそ、<span className="font-semibold text-amber-300">{user.name}</span> さん
+          </p>
+        )}
     </div>
+          
   );
 };
 
