@@ -42,6 +42,7 @@ const Books: React.FC = () => {
   const [favoriteIds, setFavoriteIds] = useState<Set<string>>(new Set());
   const [activeSection, setActiveSection] = useState<'new' | 'search' | 'favorites'>('new');
   const [showFullDescription, setShowFullDescription] = useState<Record<string, boolean>>({});
+  const [randomBooks, setRandomBooks] = useState<NewBook[]>([])
 
   // ユーザー認証
   useEffect(() => {
@@ -96,6 +97,7 @@ const Books: React.FC = () => {
     fetchFavorites();
   }, [userId]);
 
+
   // お気に入り本の詳細取得
   useEffect(() => {
     const fetchFavoriteDetails = async () => {
@@ -126,8 +128,8 @@ const Books: React.FC = () => {
     fetchFavoriteDetails();
   }, [favoriteIds]);
 
-  // 新作本の取得
  // 新作本の取得（修正版）
+ // 新作本の取得（修正版：日本語本50冊ランダム表示）
 useEffect(() => {
   const fetchNewBooks = async () => {
     setLoading(true);
@@ -136,10 +138,11 @@ useEffect(() => {
       const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
       if (!apiKey) throw new Error('Google API Keyが設定されていません');
 
+      // 複数ページから最大100件取得
       const requests = [0, 40, 80].map(startIndex =>
         axios.get('https://www.googleapis.com/books/v1/volumes', {
           params: {
-            q: '*',
+            q: '日本', // ← '*' から変更
             langRestrict: 'ja',
             orderBy: 'newest',
             maxResults: 40,
@@ -151,30 +154,43 @@ useEffect(() => {
       );
 
       const responses = await Promise.all(requests);
+
+      // 言語判定をゆるくして日本語中心の本を抽出
       const items = responses
         .flatMap(res => res.data.items || [])
-        .filter(item => item.volumeInfo.language === 'ja')
+        .filter(item =>
+          !item.volumeInfo.language ||
+          item.volumeInfo.language.toLowerCase().includes('ja')
+        )
         .map((item: any) => ({
           id: item.id,
           volumeInfo: {
             title: item.volumeInfo.title || 'タイトル不明',
             authors: item.volumeInfo.authors || [],
             imageLinks: item.volumeInfo.imageLinks || { thumbnail: '' },
-            language: item.volumeInfo.language,
           },
           isFavorite: favoriteIds.has(item.id),
-        }))
+        }));
 
-      setNewBooks(items.slice(0, 100));
+      // --- ランダムに50冊選択 ---
+      const shuffled = items.sort(() => 0.5 - Math.random());
+      const randomBooks = shuffled.slice(0, 50);
+
+      setNewBooks(randomBooks);
     } catch (err: any) {
-      const errorMessage = err.response?.data?.error?.message || err.message || '新作本の取得に失敗しました';
+      const errorMessage =
+        err.response?.data?.error?.message ||
+        err.message ||
+        '新作本の取得に失敗しました';
       setError(`新作本の取得に失敗しました: ${errorMessage}`);
     } finally {
       setLoading(false);
     }
   };
+
   fetchNewBooks();
 }, []);
+
 
   // 新作本のお気に入り状態更新
   useEffect(() => {
