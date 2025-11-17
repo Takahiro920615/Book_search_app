@@ -16,9 +16,46 @@ interface UserData {
 function Users() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [message, setMessage] = useState('');
-  const [imageUrl, setImageUrl] = useState<string>('/no_image.png');
+  const [imageUrl, setImageUrl] = useState<string>('/no_image.jpg');
   const navigate = useNavigate();
   const location = useLocation();
+  const LOCAL_BOOK_IMAGES = [
+    '/image1.jpg',
+    '/image2.jpg',
+    '/image3.jpg',
+    '/image4.jpg',
+    '/image5.jpg',
+  ];
+
+  const FallingBooksBackground = () => {
+    return (
+      <div className="falling-books-wrapper">
+        {[...Array(20)].map((_, i) => {
+          const imageSrc = LOCAL_BOOK_IMAGES[Math.floor(Math.random() * LOCAL_BOOK_IMAGES.length)];
+          const size = Math.random() * 60 + 40; // 40~100pxのランダムなサイズ
+          const left = Math.random() * 100; // 0~100%
+          const duration = Math.random() * 20 + 15; // 15~35秒で1周
+          const delay = Math.random() * 10; // 開始タイミングをランダムに
+
+          return (
+            <img
+              key={i}
+              src={imageSrc}
+              alt="falling book"
+              className="falling-book-local"
+              style={{
+                width: `${size}px`,
+                height: 'auto',
+                left: `${left}%`,
+                animationDuration: `${duration}s`,
+                animationDelay: `${delay}s`,
+              }}
+            />
+          );
+        })}
+      </div>
+    );
+  };
 
   useEffect(() => {
     console.log('Users.tsx: Current pathname:', location.pathname);
@@ -69,7 +106,7 @@ function Users() {
       if (saved) {
         setImageUrl(saved);
       } else {
-        setImageUrl('/no_image.png');
+        setImageUrl('/no_image.jpg');
       }
     } catch (e) {
       console.error('Failed to load image from localStorage', e);
@@ -115,7 +152,11 @@ function Users() {
     }
   };
 
+
   return (
+    <>
+      {/* ★背景に降る本（ページ全体に固定）★ */}
+      <FallingBooksBackground />
     <div className="users-container">
       <div className="users-box">
         <h2 className="users-title">User Dashboard</h2>
@@ -162,6 +203,7 @@ function Users() {
         {message && <p className="message">{message}</p>}
       </div>
     </div>
+    </>
   );
 }
 

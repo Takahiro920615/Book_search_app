@@ -1,18 +1,30 @@
 .users-container {
+  position: relative;
+  z-index: 10;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f5f5f5;
+  background-color: transparent !important;  /* ← これが最重要！！ */
+  pointer-events: none; /* 背景クリックを無視 */
 }
 
+.users-container > * {
+  pointer-events: auto; /* カード部分だけクリック可能に */
+}
+
+/* カード部分（users-box）にだけ背景と影を付ける */
 .users-box {
-  background-color: white;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.96) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 24px;
+  padding: 40px 32px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  max-width: 420px;
   width: 100%;
-  max-width: 400px;
+  pointer-events: auto;
 }
 
 .users-title {
@@ -99,3 +111,33 @@
   text-align: center;
   color: #666;
 } 
+
+.falling-books-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* クリックを下の要素に通す */
+  overflow: hidden;
+  z-index: -1; /* コンテンツの裏側 */
+}
+
+/* 個々の本のアニメーション */
+.falling-book-local {
+  position: absolute;
+  top: -100px;
+  opacity: 0.7;
+  animation: fall linear infinite;
+  transform: translateZ(0); /* GPU加速 */
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-100px) rotate(0deg);
+  }
+  100% {
+    transform: translateY(calc(100vh + 100px)) rotate(360deg);
+  }
+}
