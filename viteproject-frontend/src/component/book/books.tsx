@@ -4,6 +4,7 @@ import axios from 'axios';
 import GoogleAuth from '../auth/GoogleAuth';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import './books.css';
+import ModalBook from './modal_book';
 
 // 検索/お気に入り用インターフェース
 interface Book {
@@ -42,7 +43,8 @@ const Books: React.FC = () => {
   const [favoriteIds, setFavoriteIds] = useState<Set<string>>(new Set());
   const [activeSection, setActiveSection] = useState<'new' | 'search' | 'favorites'>('new');
   const [showFullDescription, setShowFullDescription] = useState<Record<string, boolean>>({});
-  const [randomBooks, setRandomBooks] = useState<NewBook[]>([])
+  const [selectedBook, setSelectedBook] = useState<Book | NewBook | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // ユーザー認証
   useEffect(() => {
@@ -355,6 +357,10 @@ useEffect(() => {
         <div
           key={book.id}
           className="luxury-card" 
+          onClick={() => {
+            setSelectedBook(book);
+            setIsModalOpen(true);
+          }}
         >
           <div>
             <div>
@@ -395,6 +401,7 @@ useEffect(() => {
             </button>
           </div>
         </div>
+        
   ))}
        </div>
 
@@ -426,7 +433,15 @@ useEffect(() => {
             ようこそ、<span className="font-semibold text-amber-300">{user.name}</span> さん
           </p>
         )}
+
+    {isModalOpen && selectedBook && (
+      <ModalBook 
+        book={selectedBook} 
+        onClose={() => setIsModalOpen(false)} 
+      />
+    )}
     </div>
+    
           
   );
 };
