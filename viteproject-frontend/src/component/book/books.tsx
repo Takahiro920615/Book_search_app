@@ -45,6 +45,8 @@ const Books: React.FC = () => {
   const [showFullDescription, setShowFullDescription] = useState<Record<string, boolean>>({});
   const [selectedBook, setSelectedBook] = useState<Book | NewBook | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [userImageUrl, setUserImageUrl] = useState<string | null>(null);
 
   // ユーザー認証
   useEffect(() => {
@@ -69,6 +71,11 @@ const Books: React.FC = () => {
         if (response.data.id !== parseInt(userId || '0', 10)) {
           setError('不正なユーザーIDです');
           navigate('/?message=不正なアクセスです', { replace: true });
+        } else {
+          // ユーザー情報からメールアドレスを保持しておく
+          if (response.data.email) {
+            setUserEmail(response.data.email);
+          }
         }
       } catch (error: any) {
         console.error('ユーザー検証エラー:', error);
@@ -80,6 +87,22 @@ const Books: React.FC = () => {
 
     verifyUser();
   }, [userId, navigate]);
+
+  // Users.tsx と同じキーでローカルストレージからユーザー画像を取得
+  useEffect(() => {
+    if (!userEmail) return;
+    try {
+      const key = `userImage:${userEmail}`;
+      const saved = localStorage.getItem(key);
+      if (saved) {
+        setUserImageUrl(saved);
+      } else {
+        setUserImageUrl('/no_image.png');
+      }
+    } catch (e) {
+      console.error('Failed to load image from localStorage in Books.tsx', e);
+    }
+  }, [userEmail]);
 
   // お気に入りID取得
   useEffect(() => {
@@ -291,14 +314,30 @@ useEffect(() => {
 
   return (
     <div className="luxury-books-container min-h-screen">
-        <h1 className="text-5xl pt-16 md:text-6xl font-bold text-center mb-4 tracking-tight">
+        <h1 className="text-5xl pt-16 md:text-6xl font-bold text-center mb-2 tracking-tight">
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-200 to-amber-400">
             至高の蔵書
           </span>
         </h1>
-        <p className="text-center text-amber-100/70 text-lg mb-12 italic">
+        {/* ユーザー丸アイコン */}
+        {userImageUrl && (
+          <div className="flex justify-center mb-4">
+            <img src={userImageUrl} alt="User" className="books-user-icon" />
+          </div>
+        )}
+        <p className="text-center text-amber-100/70 text-lg mb-8 italic">
           あなたの選ぶ、極上の1冊
         </p>
+
+        {/* ホーム画面へ戻るボタン */}
+        <div className="flex justify-center mb-6">
+          <button
+            onClick={() => navigate('/users')}
+            className="luxury-btn shadow-lg"
+          >
+            ホーム画面へ戻る
+          </button>
+        </div>
 
         {/* タブ */}
         <div className="flex justify-center gap-2 pt-8  mb-6 flex-wrap">

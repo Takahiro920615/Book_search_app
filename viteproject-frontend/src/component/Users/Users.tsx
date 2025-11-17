@@ -9,6 +9,7 @@ import Icon from '../Users/icon';
 interface UserData {
   id: number;
   email: string;
+  name?: string;
   last_login?: string;
 }
 
@@ -120,37 +121,40 @@ function Users() {
         <h2 className="users-title">User Dashboard</h2>
         {userData ? (
           <div className="user-info">
-            <p className="welcome-text">Welcome, {userData.email || 'User'}!</p>
+            <p className="welcome-text">
+              Welcome, {userData.name || userData.email || 'User'}!
+            </p>
             <img src={imageUrl} alt="User" className="user-image" />
-            <Icon
-              buttonLabel="画像を選択"
-              onSelect={(_, file) => {
-                const reader = new FileReader();
-                reader.onload = () => {
-                  const dataUrl = typeof reader.result === 'string' ? reader.result : '';
-                  if (!dataUrl) return;
-                  setImageUrl(dataUrl);
-                  try {
-                    if (userData?.email) {
-                      const key = `userImage:${userData.email}`;
-                      localStorage.setItem(key, dataUrl);
-                    }
-                  } catch (e) {
-                    console.error('Failed to save image to localStorage', e);
-                  }
-                };
-                reader.readAsDataURL(file);
-              }}
-            />
+            <div className="flex justify-center">
+              <Icon
+                buttonLabel="画像を選択"
+                onSelect={(_, file) => {
+                  const reader = new FileReader();
+                  reader.onload = () => {
+                    const dataUrl =
+                      typeof reader.result === "string" ? reader.result : "";
+                    if (!dataUrl) return;
+                    setImageUrl(dataUrl);
 
-            <p className="text-gray-600">User ID: {userData.id}</p>
-            <p className="text-gray-600">Last Login: {userData.last_login || 'N/A'}</p>
+                    try {
+                      if (userData?.email) {
+                        const key = `userImage:${userData.email}`;
+                        localStorage.setItem(key, dataUrl);
+                      }
+                    } catch (e) {
+                      console.error("Failed to save image to localStorage", e);
+                    }
+                  };
+                  reader.readAsDataURL(file);
+                }}
+              />
+            </div>
           </div>
         ) : (
           <p className="loading-text">Loading user data...</p>
         )}
         <div className="button-group">
-         <button onClick={goToBooks}>本一覧ページ</button>
+         <button onClick={goToBooks} className="book-index">本一覧ページ</button>
           <button onClick={handleLogout} className="logout-button">
             Logout
           </button>

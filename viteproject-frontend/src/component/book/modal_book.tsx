@@ -73,15 +73,6 @@ const ModalBook: React.FC<ModalBookProps> = ({ book, onClose }) => {
 
           {/* 右：詳細情報 */}
           <div className="space-y-7 overflow-y-auto max-h-[80vh] pr-2">
-            <div>
-              <h2 className="text-5xl font-bold text-amber-100 leading-tight mb-3">
-                {book.volumeInfo.title}
-              </h2>
-              <p className="text-2xl text-amber-300">
-                {book.volumeInfo.authors?.join('・') || '著者不明'}
-              </p>
-            </div>
-
             {/* Google Books 検索術 */}
             <div className="mt-10 bg-gradient-to-r from-amber-900/20 to-slate-900/80 border border-amber-700/50 rounded-2xl p-8">
               <div className="space-y-4 text-lg font-mono">

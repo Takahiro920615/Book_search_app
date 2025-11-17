@@ -66,3 +66,13 @@
 .luxury-heart {
   filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
 }
+
+/* Booksページ用の丸ユーザーアイコン */
+.books-user-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 9999px;
+  object-fit: cover;
+  border: 2px solid rgba(251, 191, 36, 0.7);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}
