@@ -25,18 +25,25 @@ function Users() {
     '/image3.jpg',
     '/image4.jpg',
     '/image5.jpg',
+    '/image6.jpg',
+    '/image7.jpg',
+    '/image8.jpg',
+    '/image9.jpg',
+    '/image10.jpg',
   ];
 
   const FallingBooksBackground = () => {
     return (
       <div className="falling-books-wrapper">
         {[...Array(20)].map((_, i) => {
-          const imageSrc = LOCAL_BOOK_IMAGES[Math.floor(Math.random() * LOCAL_BOOK_IMAGES.length)];
-          const size = Math.random() * 60 + 40; // 40~100pxのランダムなサイズ
-          const left = Math.random() * 100; // 0~100%
-          const duration = Math.random() * 20 + 15; // 15~35秒で1周
-          const delay = Math.random() * 10; // 開始タイミングをランダムに
-
+         const imageSrc = LOCAL_BOOK_IMAGES[Math.floor(Math.random() * LOCAL_BOOK_IMAGES.length)];
+         const baseSize = 90;
+         const size = baseSize + Math.random() * 130; // 90〜220pxでさらにダイナミック
+         const left = Math.random() * 100;
+         const duration = Math.random() * 25 + 20;   // 20〜45秒でゆ〜っくり
+         const delay = Math.random() * 15;
+         // 回転方向をランダムに（時計回り or 反時計回り）
+         const rotationDirection = Math.random() > 0.5 ? 1 : -1;
           return (
             <img
               key={i}

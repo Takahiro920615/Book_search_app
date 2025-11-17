@@ -126,18 +126,21 @@
 /* 個々の本のアニメーション */
 .falling-book-local {
   position: absolute;
-  top: -100px;
-  opacity: 0.7;
-  animation: fall linear infinite;
-  transform: translateZ(0); /* GPU加速 */
-  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+  top: -180px;
+  opacity: 0.88;
+  animation: fall-and-spin linear infinite;
+  transform: translateZ(0);
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+  /* 回転方向をCSS変数で受け取る */
+  --rotation-dir: 1;
 }
 
-@keyframes fall {
+@keyframes fall-and-spin {
   0% {
-    transform: translateY(-100px) rotate(0deg);
+    transform: translateY(-180px) rotate(0deg);
   }
   100% {
-    transform: translateY(calc(100vh + 100px)) rotate(360deg);
+    transform: translateY(calc(100vh + 180px)) 
+               rotate(calc(var(--rotation-dir) * 360deg));
   }
 }
