@@ -14,10 +14,9 @@ Rails.application.routes.draw do
   get '/test', to: 'test#index'
 
   # API名前空間
-  namespace :api do
-    namespace :v1 do
-      resources :favorites, only: [:index, :create, :destroy], param: :book_id
-    end
+  namespace :api, defaults: { format: :json } do
+    resources :books, only: [:index, :show, :create, :update, :destroy]
+    resources :favorites, only: [:index, :create, :destroy], param: :book_id
     # post 'sign_in', to: 'sessions#create'
     # post 'sign_up', to: 'registrations#create'
     get 'user', to: 'users#show'
