@@ -81,8 +81,16 @@ test:
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
 #
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  # host: localhost
+  # username: ...
+  # password: ...
+
 production:
   <<: *default
-  database: viteproject_backend_production
-  username: viteproject_backend
-  password: <%= ENV["VITEPROJECT_BACKEND_DATABASE_PASSWORD"] %>
+  url: <%= ENV["DATABASE_URL"] %>   
+
+
