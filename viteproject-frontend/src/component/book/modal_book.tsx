@@ -95,7 +95,7 @@ const ModalBook: React.FC<ModalBookProps> = ({ book, onClose }) => {
                 {/* 出版社指定（Google Books APIから取れる場合のみ） */}
                 {book.volumeInfo.publisher && (
                   <div className="flex flex-wrap items-center gap-3">
-                    <span className="text-amber-400 min-w-32">出版社指定</span>
+                    <span className="text-amber-400 min-w-32">出版社</span>
                     <code className="bg-black/60 px-4 py-2 rounded-lg text-amber-200 border border-amber-800/50 font-mono">
                       {book.volumeInfo.publisher}
                     </code>
