@@ -20,7 +20,7 @@ Rails.application.routes.draw do
     end
     # post 'sign_in', to: 'sessions#create'
     # post 'sign_up', to: 'registrations#create'
-    get 'user', to: 'users#show'
-    get 'protected', to: 'users#protected'
+    get 'v1/user', to: 'v1/users#show'
+    get 'v1/protected', to: 'v1/users#protected'
   end
 end
