@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  # API用のDeviseルート（JWTログイン/登録のみ）
   devise_for :users, path: 'api', controllers: {
     sessions: 'users/sessions',
     registrations: 'api/registrations',
@@ -10,17 +9,22 @@ Rails.application.routes.draw do
     sign_up: '',
     registration: 'sign_up'
   }
-  # テスト用ルート
+
   get '/test', to: 'test#index'
 
-  # API名前空間
-  namespace :api do
+  namespace :api, defaults: { format: :json } do
     namespace :v1 do
+      # books はまだコントローラー作ってないから一旦コメントアウト！
+      # resources :books, only: [:index, :show, :create, :update, :destroy]
+      
+      # 今あるものだけ残す（これで確実に通る！）
       resources :favorites, only: [:index, :create, :destroy], param: :book_id
     end
-    # post 'sign_in', to: 'sessions#create'
-    # post 'sign_up', to: 'registrations#create'
-    get 'v1/user', to: 'v1/users#show'
-    get 'v1/protected', to: 'v1/users#protected'
+
+    # v1の外でも使えるように互換ルート（フロントが /api/user で動くように）
+    get 'user', to: 'users#show'
+    get 'protected', to: 'users#protected'
   end
+
+  root to: proc { [200, {}, [{status: "API is running"}.to_json]] }
 end
