@@ -1,5 +1,5 @@
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/date-3.5.0/ext/date
-/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20251127-5803-uzlex6.rb extconf.rb
+/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20251202-14502-qa63ko.rb extconf.rb
 checking for rb_category_warn()... yes
 checking for timezone in time.h with  -Werror... yes
 checking for altzone in time.h with  -Werror... no
@@ -19,4 +19,4 @@ ld: warning: -multiply_defined is obsolete
 
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/date-3.5.0/ext/date
 make DESTDIR\= install
-/usr/bin/install -c -m 0755 date_core.bundle ./.gem.20251127-5803-8lftns
+/usr/bin/install -c -m 0755 date_core.bundle ./.gem.20251202-14502-tpdyf1

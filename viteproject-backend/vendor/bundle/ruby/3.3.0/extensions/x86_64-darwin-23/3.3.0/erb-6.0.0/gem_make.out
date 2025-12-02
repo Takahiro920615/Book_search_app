@@ -1,0 +1,19 @@
+current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.3.0/gems/erb-6.0.0/ext/erb/escape
+/Users/shimatanitakahiro/.rbenv/versions/3.3.0/bin/ruby extconf.rb
+checking for rb_ext_ractor_safe() in ruby.h... yes
+creating Makefile
+
+current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.3.0/gems/erb-6.0.0/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20251202-11618-16n9ce sitelibdir\=./.gem.20251202-11618-16n9ce clean
+
+current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.3.0/gems/erb-6.0.0/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20251202-11618-16n9ce sitelibdir\=./.gem.20251202-11618-16n9ce
+compiling escape.c
+linking shared-object erb/escape.bundle
+
+current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.3.0/gems/erb-6.0.0/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20251202-11618-16n9ce sitelibdir\=./.gem.20251202-11618-16n9ce install
+/usr/bin/install -c -m 0755 escape.bundle ./.gem.20251202-11618-16n9ce/erb
+
+current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.3.0/gems/erb-6.0.0/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20251202-11618-16n9ce sitelibdir\=./.gem.20251202-11618-16n9ce clean

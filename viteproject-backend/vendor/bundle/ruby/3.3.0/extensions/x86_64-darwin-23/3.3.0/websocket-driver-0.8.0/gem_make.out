@@ -1,0 +1,18 @@
+current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.3.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+/Users/shimatanitakahiro/.rbenv/versions/3.3.0/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.3.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20251202-11618-1t4ujm sitelibdir\=./.gem.20251202-11618-1t4ujm clean
+
+current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.3.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20251202-11618-1t4ujm sitelibdir\=./.gem.20251202-11618-1t4ujm
+compiling websocket_mask.c
+linking shared-object websocket_mask.bundle
+
+current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.3.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20251202-11618-1t4ujm sitelibdir\=./.gem.20251202-11618-1t4ujm install
+/usr/bin/install -c -m 0755 websocket_mask.bundle ./.gem.20251202-11618-1t4ujm
+
+current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.3.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20251202-11618-1t4ujm sitelibdir\=./.gem.20251202-11618-1t4ujm clean

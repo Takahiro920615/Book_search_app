@@ -1,5 +1,5 @@
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/bigdecimal-3.3.1/ext/bigdecimal
-/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20251127-5803-rd6mif.rb extconf.rb
+/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20251202-14502-zqaa35.rb extconf.rb
 checking for __builtin_clz()... yes
 checking for __builtin_clzl()... yes
 checking for __builtin_clzll()... yes
@@ -33,4 +33,4 @@ ld: warning: -multiply_defined is obsolete
 
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/bigdecimal-3.3.1/ext/bigdecimal
 make DESTDIR\= install
-/usr/bin/install -c -m 0755 bigdecimal.bundle ./.gem.20251127-5803-uaw43w
+/usr/bin/install -c -m 0755 bigdecimal.bundle ./.gem.20251202-14502-izrg8p

@@ -1,5 +1,5 @@
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/websocket-driver-0.8.0/ext/websocket-driver
-/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20251127-5803-9ivv06.rb extconf.rb
+/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20251202-14502-toeyjj.rb extconf.rb
 creating Makefile
 
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/websocket-driver-0.8.0/ext/websocket-driver
@@ -13,4 +13,4 @@ ld: warning: -multiply_defined is obsolete
 
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/websocket-driver-0.8.0/ext/websocket-driver
 make DESTDIR\= install
-/usr/bin/install -c -m 0755 websocket_mask.bundle ./.gem.20251127-5803-muw0qe
+/usr/bin/install -c -m 0755 websocket_mask.bundle ./.gem.20251202-14502-thn8ip

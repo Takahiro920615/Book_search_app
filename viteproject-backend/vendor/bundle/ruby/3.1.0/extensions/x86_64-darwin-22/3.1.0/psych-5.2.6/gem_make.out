@@ -1,5 +1,5 @@
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/psych-5.2.6/ext/psych
-/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20250523-65329-peqxqs.rb extconf.rb
+/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20251202-14502-2kz1gc.rb extconf.rb
 checking for yaml.h... yes
 checking for yaml_get_version() in -lyaml... yes
 creating Makefile
@@ -23,4 +23,4 @@ ld: warning: ignoring duplicate libraries: '-lyaml'
 
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/psych-5.2.6/ext/psych
 make DESTDIR\= install
-/usr/bin/install -c -m 0755 psych.bundle ./.gem.20250523-65329-e1f0ck
+/usr/bin/install -c -m 0755 psych.bundle ./.gem.20251202-14502-o9c4o6

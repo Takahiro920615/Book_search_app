@@ -1,5 +1,5 @@
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/racc-1.8.1/ext/racc/cparse
-/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20250523-65329-wys4me.rb extconf.rb
+/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20251202-14502-x060wi.rb extconf.rb
 creating Makefile
 
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/racc-1.8.1/ext/racc/cparse
@@ -13,4 +13,4 @@ ld: warning: -multiply_defined is obsolete
 
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/racc-1.8.1/ext/racc/cparse
 make DESTDIR\= install
-/usr/bin/install -c -m 0755 cparse.bundle ./.gem.20250523-65329-lijlwo/racc
+/usr/bin/install -c -m 0755 cparse.bundle ./.gem.20251202-14502-7ix7zl/racc

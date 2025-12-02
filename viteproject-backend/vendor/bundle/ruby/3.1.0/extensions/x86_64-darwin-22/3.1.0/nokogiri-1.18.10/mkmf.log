@@ -236,9 +236,9 @@ try_link_iconv: checking for iconv... -------------------- yes
 DYLD_FALLBACK_LIBRARY_PATH=.:/Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib "clang -o conftest -I/Users/shimatanitakahiro/.rbenv/versions/3.1.0/include/ruby-3.1.0/x86_64-darwin22 -I/Users/shimatanitakahiro/.rbenv/versions/3.1.0/include/ruby-3.1.0/ruby/backward -I/Users/shimatanitakahiro/.rbenv/versions/3.1.0/include/ruby-3.1.0 -I. -I/Users/shimatanitakahiro/.rbenv/versions/3.1.0/include  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -fdeclspec -O3 -fno-fast-math -ggdb3 -Wall -Wextra -Wdeprecated-declarations -Wdivision-by-zero -Wimplicit-function-declaration -Wimplicit-int -Wmisleading-indentation -Wpointer-arith -Wshorten-64-to-32 -Wwrite-strings -Wold-style-definition -Wmissing-noreturn -Wno-cast-function-type -Wno-constant-logical-operand -Wno-long-long -Wno-missing-field-initializers -Wno-overlength-strings -Wno-parentheses-equality -Wno-self-assign -Wno-tautological-compare -Wno-unused-parameter -Wno-unused-value -Wunused-variable -Wextra-tokens -Wundef  -fno-common -pipe -std=c99 -Wno-declaration-after-statement -O2 -g -Winline -Wmissing-noreturn -Wno-unknown-warning-option conftest.c  -L. -L/Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib -L. -L/Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib  -fstack-protector-strong -L/usr/local/lib     -lruby.3.1   "
 Undefined symbols for architecture x86_64:
   "_iconv", referenced from:
-      _main in conftest-5ad4e2.o
+      _main in conftest-713329.o
   "_iconv_open", referenced from:
-      _main in conftest-5ad4e2.o
+      _main in conftest-713329.o
 ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 checked program was:
@@ -563,7 +563,7 @@ DYLD_FALLBACK_LIBRARY_PATH=.:/Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib 
 ld: warning: ignoring duplicate libraries: '-liconv', '-llzma', '-lz', '/Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/nokogiri-1.18.10/ext/nokogiri/ports/x86_64-darwin22/libgumbo/1.0.0-nokogiri/lib/libgumbo.a', '/Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/nokogiri-1.18.10/ports/x86_64-darwin22/libxml2/2.13.9/lib/libxml2.a', '/Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/nokogiri-1.18.10/ports/x86_64-darwin22/libxslt/1.1.43/lib/libexslt.a', '/Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/nokogiri-1.18.10/ports/x86_64-darwin22/libxslt/1.1.43/lib/libxslt.a'
 Undefined symbols for architecture x86_64:
   "_xmlCtxtGetOptions", referenced from:
-      _t in conftest-147198.o
+      _t in conftest-2a2764.o
 ld: symbol(s) not found for architecture x86_64
 clang: error: linker command failed with exit code 1 (use -v to see invocation)
 checked program was:

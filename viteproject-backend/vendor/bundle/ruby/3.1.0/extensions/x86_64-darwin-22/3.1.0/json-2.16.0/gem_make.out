@@ -1,5 +1,5 @@
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/json-2.16.0/ext/json/ext/parser
-/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20251127-5803-7gdu7u.rb extconf.rb
+/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20251202-14502-2jgq4j.rb extconf.rb
 checking for rb_enc_interned_str() in ruby/encoding.h... yes
 checking for rb_str_to_interned_str() in ruby.h... yes
 checking for rb_hash_new_capa() in ruby.h... no
@@ -21,4 +21,4 @@ ld: warning: -multiply_defined is obsolete
 
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/json-2.16.0/ext/json/ext/parser
 make DESTDIR\= install
-/usr/bin/install -c -m 0755 parser.bundle ./.gem.20251127-5803-rf94pb/json/ext
+/usr/bin/install -c -m 0755 parser.bundle ./.gem.20251202-14502-leuo1y/json/ext

@@ -1,0 +1,18 @@
+current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.3.0/gems/cgi-0.5.0/ext/cgi/escape
+/Users/shimatanitakahiro/.rbenv/versions/3.3.0/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.3.0/gems/cgi-0.5.0/ext/cgi/escape
+make DESTDIR\= sitearchdir\=./.gem.20251202-11618-xcs37k sitelibdir\=./.gem.20251202-11618-xcs37k clean
+
+current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.3.0/gems/cgi-0.5.0/ext/cgi/escape
+make DESTDIR\= sitearchdir\=./.gem.20251202-11618-xcs37k sitelibdir\=./.gem.20251202-11618-xcs37k
+compiling escape.c
+linking shared-object cgi/escape.bundle
+
+current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.3.0/gems/cgi-0.5.0/ext/cgi/escape
+make DESTDIR\= sitearchdir\=./.gem.20251202-11618-xcs37k sitelibdir\=./.gem.20251202-11618-xcs37k install
+/usr/bin/install -c -m 0755 escape.bundle ./.gem.20251202-11618-xcs37k/cgi
+
+current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.3.0/gems/cgi-0.5.0/ext/cgi/escape
+make DESTDIR\= sitearchdir\=./.gem.20251202-11618-xcs37k sitelibdir\=./.gem.20251202-11618-xcs37k clean

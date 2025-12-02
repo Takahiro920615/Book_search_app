@@ -1,5 +1,5 @@
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/bcrypt-3.1.20/ext/mri
-/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20250523-65329-j8dw3f.rb extconf.rb
+/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20251202-14502-el7vch.rb extconf.rb
 creating Makefile
 
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/bcrypt-3.1.20/ext/mri
@@ -28,4 +28,4 @@ ld: warning: -multiply_defined is obsolete
 
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/bcrypt-3.1.20/ext/mri
 make DESTDIR\= install
-/usr/bin/install -c -m 0755 bcrypt_ext.bundle ./.gem.20250523-65329-t0j85n
+/usr/bin/install -c -m 0755 bcrypt_ext.bundle ./.gem.20251202-14502-6s23yf

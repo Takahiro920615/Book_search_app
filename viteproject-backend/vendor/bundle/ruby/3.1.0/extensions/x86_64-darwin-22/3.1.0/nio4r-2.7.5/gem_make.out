@@ -1,5 +1,5 @@
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/nio4r-2.7.5/ext/nio4r
-/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20251127-5803-rjypv8.rb extconf.rb
+/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20251202-14502-6wefaz.rb extconf.rb
 checking for unistd.h... yes
 checking for rb_io_descriptor()... yes
 checking for linux/aio_abi.h... no
@@ -277,4 +277,4 @@ ld: warning: -multiply_defined is obsolete
 
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/nio4r-2.7.5/ext/nio4r
 make DESTDIR\= install
-/usr/bin/install -c -m 0755 nio4r_ext.bundle ./.gem.20251127-5803-eii0w9
+/usr/bin/install -c -m 0755 nio4r_ext.bundle ./.gem.20251202-14502-etxjdb

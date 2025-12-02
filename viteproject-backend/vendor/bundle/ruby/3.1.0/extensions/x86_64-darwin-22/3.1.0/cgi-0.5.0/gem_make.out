@@ -1,5 +1,5 @@
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/cgi-0.5.0/ext/cgi/escape
-/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20250907-50487-2oyibq.rb extconf.rb
+/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20251202-14502-6off9c.rb extconf.rb
 creating Makefile
 
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/cgi-0.5.0/ext/cgi/escape
@@ -13,4 +13,4 @@ ld: warning: -multiply_defined is obsolete
 
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/cgi-0.5.0/ext/cgi/escape
 make DESTDIR\= install
-/usr/bin/install -c -m 0755 escape.bundle ./.gem.20250907-50487-4sxfu9/cgi
+/usr/bin/install -c -m 0755 escape.bundle ./.gem.20251202-14502-sep8yk/cgi

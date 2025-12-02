@@ -1,5 +1,5 @@
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/nokogiri-1.18.10/ext/nokogiri
-/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20251127-25461-adi1c.rb extconf.rb
+/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20251202-14502-2xzj67.rb extconf.rb
 checking for whether -std=c99 is accepted as CFLAGS... yes
 checking for whether -Wno-declaration-after-statement is accepted as CFLAGS... yes
 checking for whether -O2 is accepted as CFLAGS... yes
@@ -162,5 +162,5 @@ Cleaning files only used during build.
 
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/nokogiri-1.18.10/ext/nokogiri
 make DESTDIR\= install
-/usr/bin/install -c -m 0755 nokogiri.bundle ./.gem.20251127-25461-b0znb/nokogiri
+/usr/bin/install -c -m 0755 nokogiri.bundle ./.gem.20251202-14502-3ixrqc/nokogiri
 installing nokogiri libraries

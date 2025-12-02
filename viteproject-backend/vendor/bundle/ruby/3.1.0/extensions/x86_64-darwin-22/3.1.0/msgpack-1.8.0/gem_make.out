@@ -1,5 +1,5 @@
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/msgpack-1.8.0/ext/msgpack
-/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20250523-65329-b2224u.rb extconf.rb
+/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20251202-14502-ooaetg.rb extconf.rb
 checking for rb_enc_interned_str() in ruby.h... yes
 checking for rb_hash_new_capa() in ruby.h... no
 checking for rb_proc_call_with_block() in ruby.h... yes
@@ -34,4 +34,4 @@ ld: warning: -multiply_defined is obsolete
 
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/msgpack-1.8.0/ext/msgpack
 make DESTDIR\= install
-/usr/bin/install -c -m 0755 msgpack.bundle ./.gem.20250523-65329-qwsqss/msgpack
+/usr/bin/install -c -m 0755 msgpack.bundle ./.gem.20251202-14502-aj4g1f/msgpack

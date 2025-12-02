@@ -1,5 +1,5 @@
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/puma-7.1.0/ext/puma_http11
-/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20251127-5803-g2a02k.rb extconf.rb
+/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20251202-14502-is5m2r.rb extconf.rb
 checking for BIO_read() in -llibcrypto... no
 checking for BIO_read() in -lcrypto... yes
 checking for SSL_CTX_new() in -lssl... yes
@@ -37,4 +37,4 @@ ld: warning: -multiply_defined is obsolete
 
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/puma-7.1.0/ext/puma_http11
 make DESTDIR\= install
-/usr/bin/install -c -m 0755 puma_http11.bundle ./.gem.20251127-5803-59cyd1/puma
+/usr/bin/install -c -m 0755 puma_http11.bundle ./.gem.20251202-14502-6qkutq/puma

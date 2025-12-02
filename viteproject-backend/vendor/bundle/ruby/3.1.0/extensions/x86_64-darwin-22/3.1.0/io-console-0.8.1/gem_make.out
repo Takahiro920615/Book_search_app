@@ -1,5 +1,5 @@
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/io-console-0.8.1/ext/io/console
-/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20250907-50487-lj7tmq.rb extconf.rb
+/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20251202-14502-6kkby2.rb extconf.rb
 checking for rb_syserr_fail_str(0, Qnil)... yes
 checking for rb_interned_str_cstr()... yes
 checking for rb_io_path() in ruby/io.h... no
@@ -26,4 +26,4 @@ ld: warning: -multiply_defined is obsolete
 
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/io-console-0.8.1/ext/io/console
 make DESTDIR\= install
-/usr/bin/install -c -m 0755 console.bundle ./.gem.20250907-50487-hde0i5/io
+/usr/bin/install -c -m 0755 console.bundle ./.gem.20251202-14502-w888ds/io

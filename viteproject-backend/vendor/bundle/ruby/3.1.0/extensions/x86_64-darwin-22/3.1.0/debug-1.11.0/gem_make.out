@@ -1,5 +1,5 @@
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/debug-1.11.0/ext/debug
-/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20251127-5803-y8pdwf.rb extconf.rb
+/Users/shimatanitakahiro/.rbenv/versions/3.1.0/bin/ruby -I /Users/shimatanitakahiro/.rbenv/versions/3.1.0/lib/ruby/3.1.0 -r ./siteconf20251202-14502-5k970o.rb extconf.rb
 creating Makefile
 
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/debug-1.11.0/ext/debug
@@ -14,4 +14,4 @@ ld: warning: -multiply_defined is obsolete
 
 current directory: /Users/shimatanitakahiro/Book_search_app/viteproject-backend/vendor/bundle/ruby/3.1.0/gems/debug-1.11.0/ext/debug
 make DESTDIR\= install
-/usr/bin/install -c -m 0755 debug.bundle ./.gem.20251127-5803-xxeqly/debug
+/usr/bin/install -c -m 0755 debug.bundle ./.gem.20251202-14502-q7w7n5/debug
