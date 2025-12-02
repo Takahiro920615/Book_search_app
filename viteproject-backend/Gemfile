@@ -48,4 +48,5 @@ end
   
   gem 'dotenv-rails', groups: [:development, :test, :production]
 
-
+  gem 'cgi', '>= 0.3.6'
+  gem 'erb', '>= 4.0.4'
