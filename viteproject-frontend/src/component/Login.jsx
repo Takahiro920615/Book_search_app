@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import './Login.css';
+import { BASE_URL } from '@/lib/api';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -79,7 +80,7 @@ function Login() {
     setIsSubmitting(true);
     try {
       const response = await axios.post(
-        'http://localhost:3000/api/sign_in',
+        '${BASE_URL}/api/sign_in',
         { user: { email, password } },
         {
           headers: {
@@ -121,7 +122,7 @@ function Login() {
     }
 
     try {
-      const response = await axios.delete('http://localhost:3000/api/sign_out', {
+      const response = await axios.delete('${BASE_URL}/api/sign_out', {
         headers: { Authorization: token },
         withCredentials: true,
       });
@@ -153,7 +154,7 @@ function Login() {
     setIsSubmitting(true);
     console.log('Starting Google OAuth flow');
     sessionStorage.removeItem('oauth_redirect_done'); // リダイレクトフラグをリセット
-    window.location.href = 'http://localhost:3000/api/auth/google_oauth2';
+    window.location.href = '${BASE_URL}/api/auth/google_oauth2';
   };
 
   const testAuth = async () => {
@@ -164,7 +165,7 @@ function Login() {
     }
 
     try {
-      const response = await axios.get('http://localhost:3000/api/protected_endpoint', {
+      const response = await axios.get('${BASE_URL}/api/protected_endpoint', {
         headers: { Authorization: token },
         withCredentials: true,
       });

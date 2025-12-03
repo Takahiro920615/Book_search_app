@@ -5,6 +5,7 @@ import GoogleAuth from '../auth/GoogleAuth';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import './books.css';
 import ModalBook from './modal_book';
+import { BASE_URL } from '@/lib/api';
 
 // 検索/お気に入り用インターフェース
 interface Book {
@@ -59,7 +60,7 @@ const Books: React.FC = () => {
       }
 
       try {
-        const response = await axios.get('http://localhost:3000/api/user', {
+        const response = await axios.get('${BASE_URL}/api/user', {
           headers: {
             Authorization: token,
             'Content-Type': 'application/json',
@@ -110,7 +111,7 @@ const Books: React.FC = () => {
       const token = localStorage.getItem('token');
       if (!token || !userId) return;
       try {
-        const response = await axios.get('http://localhost:3000/api/v1/favorites', {
+        const response = await axios.get('${BASE_URL}/api/v1/favorites', {
           headers: { Authorization: token, 'Content-Type': 'application/json' },
         });
         setFavoriteIds(new Set(response.data.book_ids));
@@ -268,8 +269,8 @@ useEffect(() => {
 
     const isFav = favoriteIds.has(bookId);
     const url = isFav
-      ? `http://localhost:3000/api/v1/favorites/${bookId}`
-      : 'http://localhost:3000/api/v1/favorites';
+      ? `${BASE_URL}/api/v1/favorites/${bookId}`
+      : '${BASE_URL}/api/v1/favorites';
     const method = isFav ? 'delete' : 'post';
     const data = isFav ? {} : { book_id: bookId };
 
