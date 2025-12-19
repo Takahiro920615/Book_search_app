@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './Users.css';
 import Icon from '../Users/icon';
+import { BASE_URL } from '@/lib/api';
 
 
 interface UserData {
@@ -79,7 +80,7 @@ function Users() {
 
       try {
         console.log('Sending token:', token);
-        const response = await axios.get('http://localhost:3000/api/user', {
+        const response = await axios.get(`${BASE_URL}/api/user`, {
           headers: {
             Authorization: token,
             'Content-Type': 'application/json',
