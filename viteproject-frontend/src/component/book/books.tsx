@@ -60,7 +60,7 @@ const Books: React.FC = () => {
       }
 
       try {
-        const response = await axios.get('${BASE_URL}/api/user', {
+        const response = await axios.get(`${BASE_URL}/api/user`, {
           headers: {
             Authorization: token,
             'Content-Type': 'application/json',
@@ -111,7 +111,7 @@ const Books: React.FC = () => {
       const token = localStorage.getItem('token');
       if (!token || !userId) return;
       try {
-        const response = await axios.get('${BASE_URL}/api/v1/favorites', {
+        const response = await axios.get(`${BASE_URL}/api/v1/favorites`, {
           headers: { Authorization: token, 'Content-Type': 'application/json' },
         });
         setFavoriteIds(new Set(response.data.book_ids));
@@ -270,7 +270,7 @@ useEffect(() => {
     const isFav = favoriteIds.has(bookId);
     const url = isFav
       ? `${BASE_URL}/api/v1/favorites/${bookId}`
-      : '${BASE_URL}/api/v1/favorites';
+      : `${BASE_URL}/api/v1/favorites`;
     const method = isFav ? 'delete' : 'post';
     const data = isFav ? {} : { book_id: bookId };
 
