@@ -5,3 +5,6 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000
 const BASE_URL = API_BASE_URL.endsWith('/') ? API_BASE_URL.slice(0, -1) : API_BASE_URL;
 
 export { BASE_URL };
+
+console.log("API_BASE_URL (from env):", import.meta.env.VITE_API_BASE_URL);
+console.log("BASE_URL:", BASE_URL);
