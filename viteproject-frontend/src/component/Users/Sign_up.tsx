@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Sign_up.css';
+import { BASE_URL } from '@/lib/api';
 
 function SignUp() {
   const [email, setEmail] = useState('');
@@ -14,7 +15,7 @@ function SignUp() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/sign_up', {
+      const response = await axios.post(`${BASE_URL}/api/sign_up`, {
         user: {
           email,
           password,
