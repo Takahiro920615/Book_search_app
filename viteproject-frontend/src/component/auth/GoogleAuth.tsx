@@ -17,7 +17,7 @@ const GoogleAuth: React.FC<GoogleAuthProps> = ({ onSuccess }) => {
   }
 
   // ← ここを追加！バックエンドのベースURLを環境変数から取得
-  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://your-rails-app.onrender.com'; // デフォルトは自分のRender URL
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://book-search-app-1.onrender.com'; // ← ここを実際のURLに変更
 
   const handleSuccess = async (response: CredentialResponse) => {
     const { credential } = response;
