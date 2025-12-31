@@ -130,7 +130,7 @@ function Users() {
     }
 
     try {
-      await axios.delete('http://localhost:3000/api/sign_out', {
+      await axios.delete(`${BASE_URL}/api/sign_out`, {
         headers: {
           Authorization: token,
           'Content-Type': 'application/json',
