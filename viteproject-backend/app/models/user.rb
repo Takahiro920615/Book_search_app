@@ -19,23 +19,23 @@ class User < ApplicationRecord
         #  JWTベースの認証を有効化
          jwt_revocation_strategy: JwtDenylist
 
-         include Warden::JWTAuth::User
+  include Warden::JWTAuth::User
   
-         def self.from_omniauth(auth)
-          Rails.logger.info "User.from_omniauth auth: #{auth.inspect}"
-          return nil unless auth&.info # authがnilまたはinfoがない場合はnilを返す
+  def self.from_omniauth(auth)
+    Rails.logger.info "User.from_omniauth auth: #{auth.inspect}"
+    return nil unless auth&.info # authがnilまたはinfoがない場合はnilを返す
       
-          user = where(provider: auth.provider, uid: auth.uid).first_or_create do |u|
-            u.email = auth.info.email
-            u.password = Devise.friendly_token[0, 20]
-            u.name = auth.info.name if auth.info.name # 名前をオプションで設定
-          end
+    user = where(provider: auth.provider, uid: auth.uid).first_or_create do |u|
+    u.email = auth.info.email
+    u.password = Devise.friendly_token[0, 20]
+    u.name = auth.info.name if auth.info.name # 名前をオプションで設定
+  end
       
-          if user.persisted?
-            user
-          else
-            Rails.logger.error "Failed to create or find user: #{user.errors.full_messages}"
-            nil
-          end
-        end
-      end
+  if user.persisted?
+    user
+  else
+    Rails.logger.error "Failed to create or find user: #{user.errors.full_messages}"
+    nil
+  end
+  end
+end
