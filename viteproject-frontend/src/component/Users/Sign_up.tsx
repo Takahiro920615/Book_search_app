@@ -19,7 +19,7 @@ function SignUp() {
         user: {
           email,
           password,
-          passwordConfirmation,
+          password_confirmation: passwordConfirmation,
         },
       });
       const token = response.data.token;
