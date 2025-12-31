@@ -12,8 +12,6 @@ class User < ApplicationRecord
          omniauth_providers: [:google_oauth2],
          jwt_revocation_strategy: JwtDenylist
 
-  
-  include Warden::JWTAuth::User  
 
   def self.from_omniauth(auth)
     Rails.logger.info "User.from_omniauth auth: #{auth.inspect}"
