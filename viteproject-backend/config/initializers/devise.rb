@@ -17,7 +17,7 @@ Devise.setup do |config|
     image_aspect_ratio: 'square',
     image_size: 50,
     access_type: 'offline',
-    redirect_uri: 'http://localhost:3000/api/auth/google_oauth2/callback', # 本番ではENVを使用
+    # redirect_uri: 'http://localhost:3000/api/auth/google_oauth2/callback', 
     provider_ignores_state: false,
     client_options: {
       ssl: { verify: false } # ローカル開発用。本番では削除またはtrueに
