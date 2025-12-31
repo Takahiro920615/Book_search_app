@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
   devise_for :users, path: 'api', controllers: {
     sessions: 'users/sessions',
-    registrations: 'api/registrations',
     omniauth_callbacks: 'users/omniauth_callbacks'
   }, path_names: {
     sign_in: 'sign_in',
@@ -14,10 +13,6 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
-      # books はまだコントローラー作ってないから一旦コメントアウト！
-      # resources :books, only: [:index, :show, :create, :update, :destroy]
-      
-      # 今あるものだけ残す（これで確実に通る！）
       resources :favorites, only: [:index, :create, :destroy], param: :book_id
     end
 
