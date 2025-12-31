@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users, path: 'api', controllers: {
     sessions: 'users/sessions',
+    registrations: 'api/registrations',
     omniauth_callbacks: 'users/omniauth_callbacks'
   }, path_names: {
     sign_in: 'sign_in',
