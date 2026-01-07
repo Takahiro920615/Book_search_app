@@ -12,12 +12,14 @@ Devise.setup do |config|
   config.omniauth :google_oauth2,
     ENV['GOOGLE_CLIENT_ID'],
     ENV['GOOGLE_CLIENT_SECRET'],
-    scope: 'email,profile',
-    prompt: 'select_account',
-    image_aspect_ratio: 'square',
-    image_size: 50,
-    provider_ignores_state: false,
-
+    {
+      scope: 'email,profile',
+      prompt: 'select_account',
+      image_aspect_ratio: 'square',
+      image_size: 50,
+      provider_ignores_state: false
+      # access_type: 'offline'  
+    }
   # OmniAuthのグローバル設定
   OmniAuth.config.allowed_request_methods = %i[get]
   OmniAuth.config.silence_get_warning = true
