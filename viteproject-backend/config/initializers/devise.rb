@@ -16,11 +16,7 @@ Devise.setup do |config|
     prompt: 'select_account',
     image_aspect_ratio: 'square',
     image_size: 50,
-    access_type: 'offline',
     provider_ignores_state: false,
-    client_options: {
-      ssl: { verify: false } # ローカル開発用。本番では削除またはtrueに
-    }
 
   # OmniAuthのグローバル設定
   OmniAuth.config.allowed_request_methods = %i[get]
