@@ -24,11 +24,11 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         same_site: :lax,
         expires: 1.hour.from_now
       }
-        frontend_url = ENV['FRONTEND_URL'] || 'https://your-app.vercel.app'  # デフォルトは自分のVercel URLに
+        frontend_url = ENV['FRONTEND_URL'] || 'https://book-search-app-pearl.vercel.app'  # デフォルトは自分のVercel URLに
         redirect_to "#{frontend_url}/users", allow_other_host: true
     else
       Rails.logger.error "User authentication failed: #{@user&.errors&.full_messages || 'No user returned'}"
-      frontend_url = ENV['FRONTEND_URL'] || 'https://your-app.vercel.app'
+      frontend_url = ENV['FRONTEND_URL'] || 'https://book-search-app-pearl.vercel.app'
       redirect_to "#{frontend_url}/login?error=auth_failed", allow_other_host: true
     end
   end
@@ -38,7 +38,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def failure
     error_message = params[:error] || request.env['omniauth.error']&.message || 'Authentication failed'
     Rails.logger.error("OmniAuth failure: #{error_message}")
-    frontend_url = ENV['FRONTEND_URL'] || 'https://your-app.vercel.app'
+    frontend_url = ENV['FRONTEND_URL'] || 'https://book-search-app-pearl.vercel.app'
     redirect_to "#{frontend_url}/login?error=#{CGI.escape(error_message)}", allow_other_host: true
   end
 
