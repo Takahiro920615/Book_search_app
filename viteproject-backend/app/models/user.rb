@@ -13,21 +13,26 @@ class User < ApplicationRecord
          jwt_revocation_strategy: JwtDenylist
 
 
-  def self.from_omniauth(auth)
-    Rails.logger.info "User.from_omniauth auth: #{auth.inspect}"
-    return nil unless auth&.info
-
-    user = where(provider: auth.provider, uid: auth.uid).first_or_create do |u|
-      u.email = auth.info.email
-      u.password = Devise.friendly_token[0, 20]
-      u.name = auth.info.name if auth.info.name
-    end
-
-    if user.persisted?
-      user
-    else
-      Rails.logger.error "Failed to create or find user: #{user.errors.full_messages}"
-      nil
-    end
-  end
+         def self.from_omniauth(auth)
+          Rails.logger.info "User.from_omniauth called with provider: #{auth.provider}, uid: #{auth.uid}"
+          Rails.logger.info "Auth info email: #{auth.info&.email}"
+        
+          return nil unless auth&.info&.email
+        
+          user = where(provider: auth.provider, uid: auth.uid).first_or_create do |u|
+            u.email = auth.info.email
+            u.password = Devise.friendly_token[0, 20]
+            u.name = auth.info.name   
+            u.provider = auth.provider 
+            u.uid = auth.uid
+          end
+        
+          if user.persisted?
+            Rails.logger.info "User successfully found or created: ID=#{user.id}"
+            user
+          else
+            Rails.logger.error "User creation failed: #{user.errors.full_messages.join(', ')}"
+            nil
+          end
+        end
 end
