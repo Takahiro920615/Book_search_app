@@ -3,33 +3,41 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   skip_before_action :verify_authenticity_token, only: [:google_oauth2], raise: false
 
   def google_oauth2
-    Rails.logger.info "OAuth2 callback received: params=#{params.inspect}"
-    Rails.logger.info "OmniAuth auth: #{request.env['omniauth.auth']&.info&.email || 'no user'}"
-    @user = User.from_omniauth(request.env['omniauth.auth'])
-    if @user&.persisted?	
-      token = Users::SessionsController.new.send(:generate_jwt_token, @user)	
-      Rails.logger.info "Generated token: #{token}"	
-      
-      begin
-        decoded = JWT.decode(token, ENV['SECRET_KEY_BASE'] || Rails.application.credentials.secret_key_base, true, { algorithm: 'HS256' })
-        Rails.logger.info "Decoded token payload: #{decoded[0].inspect}"
-      rescue => e
-        Rails.logger.error "JWT decode error: #{e.message}"
-      end
-
+    Rails.logger.info "OAuth2 callback received"
+    auth = request.env['omniauth.auth']
+    Rails.logger.info "Auth data: #{auth.inspect}"
+  
+    @user = User.from_omniauth(auth)
+  
+    if @user&.persisted?
+      # ここで直接JWTを生成（SessionsControllerと同じロジックをコピー）
+      jti = SecureRandom.uuid
+      payload = {
+        sub: @user.id,
+        scp: 'user',
+        iat: Time.now.to_i,
+        exp: Time.now.to_i + 24.hours.to_i,
+        jti: jti
+      }
+      secret = ENV['SECRET_KEY_BASE'] || Rails.application.credentials.secret_key_base
+      token = JWT.encode(payload, secret, 'HS256')
+  
+      Rails.logger.info "Generated JWT token for user #{@user.id}: #{token}"
+  
       cookies[:auth_token] = {
         value: token,
-        httponly: false,        # フロントで読みたいならfalse（セキュリティ的にはtrueが理想だけど今はこれでOK）
+        httponly: false,
         secure: Rails.env.production?,
         same_site: :lax,
         expires: 1.hour.from_now
       }
-        frontend_url = ENV['FRONTEND_URL'] || 'https://book-search-app-pearl.vercel.app'  # デフォルトは自分のVercel URLに
-        redirect_to "#{frontend_url}/users", allow_other_host: true
-    else
-      Rails.logger.error "User authentication failed: #{@user&.errors&.full_messages || 'No user returned'}"
+  
       frontend_url = ENV['FRONTEND_URL'] || 'https://book-search-app-pearl.vercel.app'
-      redirect_to "#{frontend_url}/login?error=auth_failed", allow_other_host: true
+      redirect_to "#{frontend_url}/users", allow_other_host: true
+    else
+      Rails.logger.error "Failed to create/find user: #{@user&.errors&.full_messages}"
+      frontend_url = ENV['FRONTEND_URL'] || 'https://book-search-app-pearl.vercel.app'
+      redirect_to "#{frontend_url}/login?error=user_creation_failed", allow_other_host: true
     end
   end
 

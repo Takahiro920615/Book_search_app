@@ -38,11 +38,10 @@ class Users::SessionsController < Devise::SessionsController
         Rails.logger.info "User signed out successfully: #{current_user.id}"
       end
 
-      # リダイレクトURL（フロントエンドのログインページ）
-      frontend_url = 'http://localhost:5173/'  # 環境変数で管理推奨: ENV['FRONTEND_URL'] || 'http://localhost:5173/'
+     frontend_url = ENV['FRONTEND_URL'] || 'https://book-search-app-pearl.vercel.app'
 
       # Googleユーザー向けログアウトURL（OmniAuthの場合のみ）
-      google_logout_url = nil
+      google_logout_url = "https://accounts.google.com/logout?continue=#{CGI.escape(frontend_url)}"
       if current_user&.provider == 'google_oauth2'
         google_logout_url = "https://accounts.google.com/logout?continue=#{frontend_url}"
       end
