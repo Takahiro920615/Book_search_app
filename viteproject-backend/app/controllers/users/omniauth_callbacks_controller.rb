@@ -35,8 +35,8 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       frontend_url = ENV['FRONTEND_URL'] || 'https://book-search-app-pearl.vercel.app'
       redirect_to "#{frontend_url}/users", allow_other_host: true
     else
-      error_messages = @user&.errors&.full_messages&.join(', ') || 'Unknown error'
-      Rails.logger.error "Failed to create/find user: #{error_messages}"
+      error_messages = @user&.errors&.full_messages&.join(', ') || 'Unknown error during user creation'
+      Rails.logger.error "Failed to persist user: #{error_messages}"
       frontend_url = ENV['FRONTEND_URL'] || 'https://book-search-app-pearl.vercel.app'
       redirect_to "#{frontend_url}/login?error=user_creation_failed", allow_other_host: true
     end
