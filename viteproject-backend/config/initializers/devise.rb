@@ -13,12 +13,12 @@ Devise.setup do |config|
     ENV['GOOGLE_CLIENT_ID'],
     ENV['GOOGLE_CLIENT_SECRET'],
     {
-      scope: 'email,profile',
+      scope: 'email,profile,openid',
       prompt: 'select_account',
       image_aspect_ratio: 'square',
       image_size: 50,
       provider_ignores_state: false
-      # access_type: 'offline'  
+      access_type: 'offline'  
     }
   # OmniAuthのグローバル設定
   OmniAuth.config.allowed_request_methods = %i[get]

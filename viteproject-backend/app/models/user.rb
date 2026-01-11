@@ -21,7 +21,6 @@ class User < ApplicationRecord
           user = where(provider: auth.provider, uid: auth.uid).first_or_create do |u|
             u.email = auth.info.email
             u.password = Devise.friendly_token[0, 20]
-            u.name = auth.info.name # nilでもOK
             u.provider = auth.provider # 明示的に設定（安全のため）
             u.uid = auth.uid
           end
