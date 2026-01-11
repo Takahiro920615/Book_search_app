@@ -17,8 +17,8 @@ Devise.setup do |config|
       prompt: 'select_account',
       image_aspect_ratio: 'square',
       image_size: 50,
-      provider_ignores_state: false
-      access_type: 'offline'  
+      provider_ignores_state: 'false',
+      access_type: 'offline',
     }
   # OmniAuthのグローバル設定
   OmniAuth.config.allowed_request_methods = %i[get]
