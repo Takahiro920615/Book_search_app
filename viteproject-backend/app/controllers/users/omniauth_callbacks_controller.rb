@@ -33,7 +33,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       }
   
       frontend_url = ENV['FRONTEND_URL'] || 'https://book-search-app-pearl.vercel.app'
-      redirect_to "#{frontend_url}/users", allow_other_host: true
+      redirect_to "#{frontend_url}/users?auth_token=#{CGI.escape(token)}", allow_other_host: true
     else
       error_messages = @user&.errors&.full_messages&.join(', ') || 'Unknown error during user creation'
       Rails.logger.error "Failed to persist user: #{error_messages}"

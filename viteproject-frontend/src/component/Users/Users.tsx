@@ -69,15 +69,28 @@ function Users() {
     console.log('Users.tsx: Current pathname:', location.pathname);
     console.log('Users.tsx: Query params:', window.location.search);
 
-    const fetchUserData = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        setMessage('トークンがありません。ログインしてください。');
-        console.error('No token in localStorage');
-        navigate('/?message=ログインが必要です', { replace: true });
-        return;
-      }
+    const urlParams = new URLSearchParams(location.search);
+    const tokenFromQuery = urlParams.get('auth_token');
 
+    if (tokenFromQuery) {
+      const bearerToken = `Bearer ${tokenFromQuery}`;
+      localStorage.setItem('token', bearerToken);
+      console.log('Token saved from query param to localStorage:', bearerToken);
+  
+      // トークンがURLに残らないようにクエリパラメータを削除（セキュリティのため）
+      window.history.replaceState({}, '', location.pathname);
+    }
+
+    // 既存のトークンチェック処理はそのまま
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setMessage('トークンがありません。ログインしてください。');
+      console.error('No token in localStorage');
+      navigate('/?message=ログインが必要です', { replace: true });
+      return;
+    }
+
+    const fetchUserData = async () => {
       try {
         console.log('Sending token:', token);
         const response = await axios.get(`${BASE_URL}/api/user`, {
@@ -86,7 +99,7 @@ function Users() {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
           },
-          withCredentials: true, // クッキーを送信
+          withCredentials: true,
         });
 
         console.log('User data:', response.data);
