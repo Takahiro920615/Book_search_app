@@ -14,6 +14,7 @@ function SignUp() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setMessage('');
     try {
       const response = await axios.post(`${BASE_URL}/api/sign_up`, {
         user: {
@@ -22,7 +23,10 @@ function SignUp() {
           password_confirmation: passwordConfirmation,
         },
       });
-      const token = response.data.token;
+
+      console.log('成功レスポンス:', response.data);
+
+      const token = response.data.token || response.data.jwt;
       if (token) {
         const bearerToken = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
         localStorage.setItem('token', bearerToken);
@@ -30,9 +34,39 @@ function SignUp() {
       } else {
         setMessage('Token not received');
       }
-    } catch (error) {
-      setMessage(`Registration failed: ${error.response?.data?.errors || error.message}`);
+    } catch (error: any) {
+      console.error('=== SignUp エラー詳細 ===');
+      console.error('Status:', error.response?.status);
+      console.error('全レスポンスデータ:', error.response?.data);
+      console.error('エラーメッセージ:', error.response?.data?.error || error.response?.data?.errors || error.message);
+      console.error('Axios error:', error);
+  
+      let displayMessage = '登録に失敗しました';
+  
+      if (error.response?.status === 500) {
+        displayMessage += '（サーバー内部エラー 500）';
+      }
+
+      const serverError = error.response?.data;
+    if (serverError) {
+      if (serverError.errors) {
+        // { errors: { email: ["has already been taken"] } } のような場合
+        displayMessage += ': ' + Object.entries(serverError.errors)
+          .map(([key, msgs]) => `${key}: ${Array.isArray(msgs) ? msgs.join(', ') : msgs}`)
+          .join(' / ');
+      } else if (serverError.error) {
+        displayMessage += `: ${serverError.error}`;
+      } else if (serverError.message) {
+        displayMessage += `: ${serverError.message}`;
+      } else if (typeof serverError === 'string') {
+        displayMessage += `: ${serverError}`;
+      }
+    } else if (error.message) {
+      displayMessage += `: ${error.message}`;
     }
+
+    setMessage(displayMessage);
+   }
   };
 
   return (
