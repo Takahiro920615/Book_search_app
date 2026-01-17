@@ -3,6 +3,12 @@ module Api
   class RegistrationsController < Devise::RegistrationsController
     respond_to :json
 
+    rescue_from StandardError do |e|
+      Rails.logger.error "RegistrationsController ERROR: #{e.class} - #{e.message}"
+      Rails.logger.error e.backtrace.join("\n")
+      render json: { error: e.message, type: e.class.name }, status: :internal_server_error
+    end
+
     def create
       build_resource(sign_up_params)
   
