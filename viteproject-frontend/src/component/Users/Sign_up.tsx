@@ -40,6 +40,9 @@ function SignUp() {
       console.error('全レスポンスデータ:', error.response?.data);
       console.error('エラーメッセージ:', error.response?.data?.error || error.response?.data?.errors || error.message);
       console.error('Axios error:', error);
+      if (error.response && typeof error.response.data === 'string') {
+        console.error('サーバー生レスポンス:', error.response.data);
+      }
   
       let displayMessage = '登録に失敗しました';
   
