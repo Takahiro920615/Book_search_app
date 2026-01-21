@@ -14,10 +14,10 @@ module Api
   
       if resource.save
         # JWTを生成する
-        token = Warden::JWTAuth::UserEncoder.new.call(resource, :user, nil).first
+        # token = Warden::JWTAuth::UserEncoder.new.call(resource, :user, nil).first
         render json: {
           message: 'User created successfully',
-          token: token,
+          # token: token,
           user: { id: resource.id, email: resource.email }
         }, status: :created
       else
