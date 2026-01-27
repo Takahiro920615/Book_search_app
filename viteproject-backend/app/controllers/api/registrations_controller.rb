@@ -1,7 +1,6 @@
 # app/controllers/api/registrations_controller.rb
 module Api
   class RegistrationsController < Devise::RegistrationsController
-    skip_before_action :verify_authenticity
     respond_to :json
 
     rescue_from StandardError do |e|
