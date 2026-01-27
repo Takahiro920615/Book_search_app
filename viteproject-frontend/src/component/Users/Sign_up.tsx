@@ -25,52 +25,60 @@ function SignUp() {
       });
 
       console.log('成功レスポンス:', response.data);
-
-      const token = response.data.token || response.data.jwt;
-      if (token) {
-        const bearerToken = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
-        localStorage.setItem('token', bearerToken);
-        navigate('/users');// 登録後にユーザーページへ遷移
+      console.log('Authorization header:', response.headers['authorization']);
+  
+      // 👇 ここが修正ポイント
+      const authHeader = response.headers['authorization'];
+  
+      if (authHeader) {
+        // すでに Bearer 付きなのでそのまま保存
+        localStorage.setItem('token', authHeader);
+        navigate('/users');
       } else {
         setMessage('Token not received');
       }
+  
     } catch (error: any) {
       console.error('=== SignUp エラー詳細 ===');
       console.error('Status:', error.response?.status);
       console.error('全レスポンスデータ:', error.response?.data);
-      console.error('エラーメッセージ:', error.response?.data?.error || error.response?.data?.errors || error.message);
+      console.error(
+        'エラーメッセージ:',
+        error.response?.data?.error ||
+        error.response?.data?.errors ||
+        error.message
+      );
       console.error('Axios error:', error);
-      if (error.response && typeof error.response.data === 'string') {
-        console.error('サーバー生レスポンス:', error.response.data);
-      }
   
       let displayMessage = '登録に失敗しました';
   
       if (error.response?.status === 500) {
         displayMessage += '（サーバー内部エラー 500）';
       }
-
+  
       const serverError = error.response?.data;
-    if (serverError) {
-      if (serverError.errors) {
-        // { errors: { email: ["has already been taken"] } } のような場合
-        displayMessage += ': ' + Object.entries(serverError.errors)
-          .map(([key, msgs]) => `${key}: ${Array.isArray(msgs) ? msgs.join(', ') : msgs}`)
-          .join(' / ');
-      } else if (serverError.error) {
-        displayMessage += `: ${serverError.error}`;
-      } else if (serverError.message) {
-        displayMessage += `: ${serverError.message}`;
-      } else if (typeof serverError === 'string') {
-        displayMessage += `: ${serverError}`;
+      if (serverError) {
+        if (serverError.errors) {
+          displayMessage += ': ' + Object.entries(serverError.errors)
+            .map(([key, msgs]) =>
+              `${key}: ${Array.isArray(msgs) ? msgs.join(', ') : msgs}`
+            )
+            .join(' / ');
+        } else if (serverError.error) {
+          displayMessage += `: ${serverError.error}`;
+        } else if (serverError.message) {
+          displayMessage += `: ${serverError.message}`;
+        } else if (typeof serverError === 'string') {
+          displayMessage += `: ${serverError}`;
+        }
+      } else if (error.message) {
+        displayMessage += `: ${error.message}`;
       }
-    } else if (error.message) {
-      displayMessage += `: ${error.message}`;
+  
+      setMessage(displayMessage);
     }
-
-    setMessage(displayMessage);
-   }
   };
+  
 
   return (
     <div className="signup-container">
