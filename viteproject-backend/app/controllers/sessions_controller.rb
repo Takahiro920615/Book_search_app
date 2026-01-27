@@ -7,6 +7,7 @@ class SessionsController < ApplicationController
       u.uid = auth['uid']
     end
     session[:user_id] = user.id
-    redirect_to 'http://localhost:5173' # Viteのフロントエンドにリダイレクト
+    frontend_url = ENV['FRONTEND_URL'] || 'http://localhost:5173'
+    redirect_to frontend_url # Viteのフロントエンドにリダイレクト
   end
 end
