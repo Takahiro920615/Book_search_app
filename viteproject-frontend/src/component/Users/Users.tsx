@@ -76,9 +76,6 @@ function Users() {
       const bearerToken = `Bearer ${tokenFromQuery}`;
       localStorage.setItem('token', bearerToken);
       console.log('Token saved from query param to localStorage:', bearerToken);
-  
-      // トークンがURLに残らないようにクエリパラメータを削除（セキュリティのため）
-      window.history.replaceState({}, '', location.pathname);
     }
 
     // 既存のトークンチェック処理はそのまま
