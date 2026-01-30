@@ -105,10 +105,6 @@ function Users() {
       } catch (error: any) {
         console.error('User data error:', error.response || error);
         setMessage(`ユーザー情報の取得に失敗しました: ${error.response?.data?.error || error.message}`);
-        if ([401, 422].includes(error.response?.status)) {
-          localStorage.removeItem('token');
-          navigate('/?message=トークンが無効です。再度ログインしてください。', { replace: true });
-        }
       }
     };
 
