@@ -116,7 +116,7 @@ function Users() {
     };
 
     fetchUserData();
-  }, [navigate, location.pathname]);
+  }, []);
 
   // Load persisted image after user data is available
   useEffect(() => {
@@ -157,9 +157,9 @@ function Users() {
     } catch (error: any) {
       console.error('ログアウトエラー:', error.response || error);
       setMessage(`ログアウトに失敗しました: ${error.response?.data?.error || error.message}`);
-      if ([401, 422, 500].includes(error.response?.status)) {
-        localStorage.removeItem('token');
-        navigate('/?message=トークンが無効です。ログイン画面に戻ります。', { replace: true });
+      if ([401, 422].includes(error.response?.status)) {
+        console.warn('認証エラー。トークンを確認してください');
+        setMessage('認証エラーが発生しました。再ログインしてください。');
       }
     }
   };
