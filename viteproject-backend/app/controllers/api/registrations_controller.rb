@@ -23,7 +23,14 @@ module Api
     
         if user.save
           Rails.logger.info "Save SUCCESS: #{user.id} - #{user.email}"
-          render json: { message: 'Success', user: { id: user.id, email: user.email } }, status: :created
+          token = Warden::JWTAuth::UserEncoder.new.call(user, :user, nil).first
+          frontend_users_url = ENV['FRONTEND_USERS_URL'] || 'https://book-search-app-pearl.vercel.app/users'
+          render json: { 
+            message: 'Success', 
+            token: token, 
+            user: { id: user.id, email: user.email },
+            redirect_url: frontend_users_url  # ← ここでフロントに遷移先を伝える
+          }, status: :created
         else
           Rails.logger.error "Save FAILED: #{user.errors.full_messages.join(', ')}"
           render json: { errors: user.errors.full_messages }, status: :unprocessable_entity

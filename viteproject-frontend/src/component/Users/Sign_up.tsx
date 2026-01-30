@@ -25,15 +25,17 @@ function SignUp() {
       });
 
       console.log('成功レスポンス:', response.data);
-      console.log('Authorization header:', response.headers['authorization']);
+
+      const token = response.data.token || response.data.jwt;
+      if (token) {
+        const bearerToken = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
+        localStorage.setItem('token', bearerToken);
   
-      // 👇 ここが修正ポイント
-      const authHeader = response.headers['authorization'];
+        // バックエンドから返ってきたredirect_urlを使う（柔軟）
+        const redirectUrl = response.data.redirect_url || '/users';
   
-      if (authHeader) {
-        // すでに Bearer 付きなのでそのまま保存
-        localStorage.setItem('token', authHeader);
-        navigate('/users');
+        // 成功したら即遷移
+        navigate(redirectUrl);
       } else {
         setMessage('Token not received');
       }
