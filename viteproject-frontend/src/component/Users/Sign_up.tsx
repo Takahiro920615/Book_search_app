@@ -32,10 +32,10 @@ function SignUp() {
         localStorage.setItem('token', bearerToken);
   
         // バックエンドから返ってきたredirect_urlを使う（柔軟）
-        const redirectUrl = response.data.redirect_url || '/users';
+        const redirectPath = response.data.redirect_path || '/users';
   
         // 成功したら即遷移
-        navigate(redirectUrl);
+        navigate(redirectPath);
       } else {
         setMessage('Token not received');
       }
