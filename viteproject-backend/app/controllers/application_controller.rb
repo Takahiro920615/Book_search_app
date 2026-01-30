@@ -3,7 +3,7 @@ class ApplicationController < ActionController::API
   include Devise::Controllers::Helpers
   include ActionController::RequestForgeryProtection
 
-  protect_from_forgery with: :null_session # CSRFトークンがなくても破棄しない
+  protect_from_forgery with: :null_session, if: -> { request.format.json? }
   
   rescue_from Exception do |exception|
     Rails.logger.fatal "GLOBAL FATAL ERROR: #{exception.class} - #{exception.message}"
