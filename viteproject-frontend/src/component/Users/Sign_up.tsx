@@ -12,7 +12,7 @@ function SignUp() {
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
-
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage('');
@@ -27,9 +27,11 @@ function SignUp() {
 
       console.log('成功レスポンス:', response.data);
 
-      const authHeader = response.headers['authorization'];
-      if (authHeader) {
-        localStorage.setItem('token', authHeader);
+      const token = response.data.token || response.data.jwt;
+      if (token) {
+        const bearerToken = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
+        localStorage.setItem('token', bearerToken);
+  
         // バックエンドから返ってきたredirect_urlを使う（柔軟）
         const redirectPath = response.data.redirect_path || '/users';
   
