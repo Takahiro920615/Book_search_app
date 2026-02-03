@@ -16,27 +16,5 @@ module Api
     def protected
       render json: { message: "You are authenticated!", user: current_user.email }, status: :ok
     end
-
-    private
-
-    # 認証失敗時のカスタムレスポンス
-    def authenticate_user!
-      token = request.headers['Authorization']&.sub(/^Bearer /, '') || ''
-      if token.blank?
-        return render json: { error: 'No token provided' }, status: :unauthorized
-      end
-  
-      begin
-        payload = JWT.decode(token, ENV['SECRET_KEY_BASE'] || Rails.application.credentials.secret_key_base, true, algorithm: 'HS256').first
-        @current_user = User.find_by(id: payload['sub'])
-        if @current_user.nil?
-          render json: { error: 'User not found' }, status: :unauthorized
-        end
-      rescue JWT::ExpiredSignature
-        render json: { error: 'Token expired' }, status: :unauthorized
-      rescue JWT::DecodeError => e
-        render json: { error: "Invalid token: #{e.message}" }, status: :unauthorized
-      end
-    end
   end
 end
