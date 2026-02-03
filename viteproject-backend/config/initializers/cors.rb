@@ -1,7 +1,7 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
    
-    origins "https://book-search-app-pearl.vercel.app", "http://localhost:5173"
+    origins "https://book-search-app-pearl.vercel.app"
 
     # 必要に応じてローカル開発用も追加（テスト時用）
     # origins "https://book-search-app-pearl.vercel.app", "http://localhost:5173"
