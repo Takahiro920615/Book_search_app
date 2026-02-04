@@ -1,7 +1,10 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     # 本番のVercelフロントエンドのみ許可（セキュリティのため）
-    origins 'https://book-search-app-pearl.vercel.app'
+    origins(
+      'https://book-search-app-pearl.vercel.app',                                 
+      /https:\/\/book-search-[a-z0-9]+-takahiro-shimatanis-projects\.vercel\.app/  
+    )
 
     # ローカル開発用も許可（テストしやすい）
     # origins 'https://book-search-l822mpvto-takahiro-shimatanis-projects.vercel.app', 'http://localhost:5173', 'https://localhost:5173'
