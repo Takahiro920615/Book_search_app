@@ -15,8 +15,8 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def destroy
-    Rails.logger.info "Sign out called with headers: #{request.headers['Authorization']}"
-    token = request.headers['Authorization']&.split('Bearer ')&.last
+    Rails.logger.info "DEVISE_JWT_SECRET_KEY used for verification: #{ENV['DEVISE_JWT_SECRET_KEY'].inspect}"
+    Rails.logger.info "Received token: #{request.headers['Authorization']}"
 
     unless token
       Rails.logger.error "No token provided for sign out"
