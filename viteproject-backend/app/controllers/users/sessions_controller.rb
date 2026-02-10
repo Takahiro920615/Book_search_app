@@ -15,53 +15,23 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def destroy
-    Rails.logger.info "DEVISE_JWT_SECRET_KEY used for verification: #{ENV['DEVISE_JWT_SECRET_KEY'].inspect}"
-    Rails.logger.info "Received token: #{request.headers['Authorization']}"
-
-    unless token
-      Rails.logger.error "No token provided for sign out"
+    # tokenの存在チェック（任意だが推奨。ないとDeviseが401を返す）
+    if request.headers['Authorization'].blank?
       render json: { error: 'トークンが提供されていません' }, status: :bad_request
       return
-    end
+    end  
+    frontend_url = ENV['FRONTEND_URL'] || 'https://book-search-app-pearl.vercel.app'
 
-    begin
-      decoded = JWT.decode(token, ENV['SECRET_KEY_BASE'] || Rails.application.credentials.secret_key_base, true, { algorithm: 'HS256' })
-      jti = decoded[0]['jti']
-      raise JWT::InvalidJtiError, 'Missing jti' unless jti
-
-      # JWTをdenylistに追加
-      JwtDenylist.create!(jti: jti, exp: Time.at(decoded[0]['exp']))
-
-      # ユーザーをサインアウト（current_userが存在する場合）
-      if current_user
-        sign_out(current_user)
-        Rails.logger.info "User signed out successfully: #{current_user.id}"
-      end
-
-     frontend_url = ENV['FRONTEND_URL'] || 'https://book-search-app-pearl.vercel.app'
-
-      # Googleユーザー向けログアウトURL（OmniAuthの場合のみ）
+    google_logout_url = nil
+    if current_user&.provider == 'google_oauth2'
       google_logout_url = "https://accounts.google.com/logout?continue=#{CGI.escape(frontend_url)}"
-      if current_user&.provider == 'google_oauth2'
-        google_logout_url = "https://accounts.google.com/logout?continue=#{frontend_url}"
-      end
-
-      render json: {
-        message: 'ログアウトしました',
-        redirect_url: frontend_url,
-        google_logout_url: google_logout_url
-      }, status: :ok
-
-    rescue JWT::DecodeError => e
-      Rails.logger.error "Invalid token for sign out: #{e.message}"
-      render json: { error: "無効なトークン: #{e.message}" }, status: :unauthorized
-    rescue JWT::InvalidJtiError => e
-      Rails.logger.error "Database error in logout: #{e.message}"
-      render json: { error: 'ログアウト処理中にデータベースエラーが発生しました' }, status: :internal_server_error
-    rescue StandardError => e
-      Rails.logger.error "Sign out error: #{e.message}, Backtrace: #{e.backtrace.join('\n')}"
-      render json: { error: "サーバーエラー: #{e.message}" }, status: :internal_server_error
     end
+  
+    render json: {
+      message: 'ログアウトしました',
+      redirect_url: frontend_url,
+      google_logout_url: google_logout_url
+    }, status: :ok
   end
 
   private
