@@ -136,7 +136,9 @@ function Users() {
     }
 
     try {
-      await axios.delete(`${BASE_URL}/api/sign_out`, {
+      const response = await axios({
+        method: 'delete',
+        url: `${BASE_URL}/api/sign_out`,
         headers: {
           Authorization: token,
           'Content-Type': 'application/json',
