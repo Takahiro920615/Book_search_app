@@ -148,12 +148,10 @@ function Users() {
       setMessage('ログアウトしました！');
       navigate('/?message=ログアウトしました', { replace: true });
     } catch (error: any) {
-      console.error('ログアウトエラー:', error.response || error);
-      setMessage(`ログアウトに失敗しました: ${error.response?.data?.error || error.message}`);
-      if ([401, 422].includes(error.response?.status)) {
-        console.warn('認証エラー。トークンを確認してください');
-        setMessage('認証エラーが発生しました。再ログインしてください。');
-      }
+      console.error('ログアウトエラー:', error);
+      localStorage.removeItem('token');  // エラーでもトークン削除（安全）
+      setMessage('ログアウトに失敗しましたが、トークンをクリアしました。再ログインしてください。');
+      navigate('/login', { replace: true });
     }
   };
 

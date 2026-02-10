@@ -2,6 +2,7 @@ class Users::SessionsController < Devise::SessionsController
   include Devise::JWT::RevocationStrategies::Denylist
   skip_before_action :verify_authenticity_token, only: [:create, :destroy], raise: false
   skip_before_action :verify_signed_out_user, only: :destroy
+  before_action :set_fake_session_for_devise, only: [:destroy]  # ← destroy限定でOK
   respond_to :json
 
   def create
@@ -52,4 +53,13 @@ class Users::SessionsController < Devise::SessionsController
   def auth_options
     { scope: resource_name, recall: "#{controller_path}#new" }
   end
+
+  def set_fake_session_for_devise
+    # APIモードでセッションが無効でもDeviseがクラッシュしないように偽装
+    if request.env['rack.session'].nil?
+      request.env['rack.session'] = {}
+    end
+    request.env['rack.session']['enabled?'] = false  # これが鍵
+  end
+
 end
