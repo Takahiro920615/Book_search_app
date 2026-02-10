@@ -131,7 +131,7 @@ function Users() {
     const token = localStorage.getItem('token');
     if (!token) {
       setMessage('トークンがありません。ログインしてください。');
-      navigate('/?message=ログインが必要です', { replace: true });
+      navigate('/', { replace: true });
       return;
     }
 
@@ -148,12 +148,12 @@ function Users() {
       });
       localStorage.removeItem('token');
       setMessage('ログアウトしました！');
-      navigate('/?message=ログアウトしました', { replace: true });
+      navigate('/?message=success:ログアウトしました', { replace: true });
     } catch (error: any) {
       console.error('ログアウトエラー:', error);
       localStorage.removeItem('token');  // エラーでもトークン削除（安全）
       setMessage('ログアウトに失敗しましたが、トークンをクリアしました。再ログインしてください。');
-      navigate('/login', { replace: true });
+      navigate('/?message=error:ログアウトに失敗しましたが、再ログインしてください', { replace: true });
     }
   };
 

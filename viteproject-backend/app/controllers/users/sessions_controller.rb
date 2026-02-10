@@ -41,7 +41,7 @@ class Users::SessionsController < Devise::SessionsController
     jti = SecureRandom.uuid
     JWT.encode(
       { sub: user.id, scp: 'user', iat: Time.now.to_i, exp: Time.now.to_i + 24 * 3600, jti: jti },
-      ENV['SECRET_KEY_BASE'] || Rails.application.credentials.secret_key_base,
+      Rails.application.credentials.secret_key_base,  # ← ここを統一！
       'HS256'
     )
   end
