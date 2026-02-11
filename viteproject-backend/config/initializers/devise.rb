@@ -25,7 +25,8 @@ Devise.setup do |config|
   OmniAuth.config.silence_get_warning = true
 
   config.jwt do |jwt|
-    jwt.secret = ENV['DEVISE_JWT_SECRET_KEY'] || Rails.application.credentials.secret_key_base
+    jwt.secret = ENV['SECRET_KEY_BASE'] || raise("SECRET_KEY_BASE is not set in environment variables!")
+    Rails.logger.info "JWT secret loaded: present=#{jwt.secret.present?}, length=#{jwt.secret&.length || 0}"
     jwt.dispatch_requests = [
       ['POST', %r{^/api/sign_in$}],
       ['POST', %r{^/api/sign_up$}]
