@@ -69,47 +69,62 @@ function Users() {
     console.log('Users.tsx: Current pathname:', location.pathname);
     console.log('Users.tsx: Query params:', window.location.search);
 
-    const urlParams = new URLSearchParams(location.search);
-    const tokenFromQuery = urlParams.get('auth_token');
-
-    if (tokenFromQuery) {
-      const bearerToken = `Bearer ${tokenFromQuery}`;
-      localStorage.setItem('token', bearerToken);
-      console.log('Token saved from query param to localStorage:', bearerToken);
-    }
-
-    // 既存のトークンチェック処理はそのまま
     const token = localStorage.getItem('token');
-    if (!token) {
-      setMessage('トークンがありません。ログインしてください。');
-      console.error('No token in localStorage');
-      navigate('/?message=ログインが必要です', { replace: true });
-      return;
-    }
 
-    const fetchUserData = async () => {
-      try {
-        console.log('Sending token:', token);
-        const response = await axios.get(`${BASE_URL}/api/user`, {
-          headers: {
-            Authorization: token,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          },
-          withCredentials: true,
-        });
+  // クエリパラメータからトークン取得（OmniAuth/Googleログイン用）
+  const urlParams = new URLSearchParams(location.search);
+  const tokenFromQuery = urlParams.get('auth_token');
+  if (tokenFromQuery) {
+    const bearerToken = `Bearer ${tokenFromQuery}`;
+    localStorage.setItem('token', bearerToken);
+    console.log('Token saved from query param:', bearerToken);
+    // クエリパラメータをクリア（URLをきれいに）
+    navigate(location.pathname, { replace: true });
+  }
 
-        console.log('User data:', response.data);
-        setUserData(response.data);
-        setMessage('ユーザー情報を取得しました！');
-      } catch (error: any) {
-        console.error('User data error:', error.response || error);
-        setMessage(`ユーザー情報の取得に失敗しました: ${error.response?.data?.error || error.message}`);
+  // トークンがなければログイン画面へ
+  if (!localStorage.getItem('token')) {
+    navigate('/?message=ログインが必要です', { replace: true });
+    return;
+  }
+
+  const fetchUserData = async () => {
+    const currentToken = localStorage.getItem('token');
+    if (!currentToken) return;
+
+    try {
+      const response = await axios.get(`${BASE_URL}/api/user`, {
+        headers: {
+          Authorization: currentToken,
+        },
+      });
+
+      console.log('User data fetched:', response.data);
+      setUserData(response.data);
+      setMessage('ユーザー情報を取得しました！');
+
+      // ★重要: ここでトークンを再確認・保存（万が一レスポンスに新しいトークンが返ってきた場合）
+      // 通常は不要ですが、安全のため
+      if (response.headers.authorization) {
+        localStorage.setItem('token', response.headers.authorization);
       }
-    };
 
-    fetchUserData();
-  }, []);
+    } catch (error: any) {
+      console.error('Fetch user error:', error.response?.data || error);
+      const errMsg = error.response?.data?.error || error.message;
+
+      if (error.response?.status === 401) {
+        setMessage('認証エラーです。再ログインしてください。');
+        localStorage.removeItem('token');
+        navigate('/?message=認証エラーが発生しました。再ログインしてください。', { replace: true });
+      } else {
+        setMessage(`ユーザー情報の取得に失敗しました: ${errMsg}`);
+      }
+    }
+  };
+
+  fetchUserData();
+}, [location.search, navigate]);  // location.search を依存に追加
 
   // Load persisted image after user data is available
   useEffect(() => {

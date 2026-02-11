@@ -113,37 +113,56 @@ function Login() {
   const handleLogout = async () => {
     if (isSubmitting) return;
     setIsSubmitting(true);
-    const token = Cookies.get('auth_token') ? `Bearer ${Cookies.get('auth_token')}` : localStorage.getItem('token');
-    if (!token) {
+  
+    // localStorage の token を優先的に取得（通常ログインで保存されているもの）
+    const token = localStorage.getItem('token');
+  
+    // クッキーは Google OAuth 専用として扱う（通常ログインでは使わない）
+    const cookieToken = Cookies.get('auth_token');
+    if (cookieToken) {
+      console.log('Google OAuth token detected in cookie, using it for logout');
+    }
+  
+    // どちらもなければエラー
+    if (!token && !cookieToken) {
       setMessage('トークンがありません。既にログアウトしています！');
-      console.error('Login.jsx: No token for logout');
+      console.error('No token available for logout');
       setIsSubmitting(false);
       return;
     }
-
+  
+    // token を統一（localStorage優先）
+    const logoutToken = token || `Bearer ${cookieToken}`;
+  
     try {
       const response = await axios.delete(`${BASE_URL}/api/sign_out`, {
-        headers: { Authorization: token },
+        headers: { Authorization: logoutToken },
         withCredentials: true,
       });
-
-      // Google ログアウト URL を処理
-      const { google_logout_url } = response.data;
+  
+      // 成功したら全ストレージクリア
       localStorage.removeItem('token');
       Cookies.remove('auth_token');
       sessionStorage.removeItem('oauth_redirect_done');
+  
       setEmail('');
       setPassword('');
       setMessage('ログアウトしました！');
+  
+      const { google_logout_url } = response.data;
       if (google_logout_url) {
-        console.log('Login.jsx: Redirecting to Google logout:', google_logout_url);
-        window.location.href = google_logout_url; // Googleセッションをクリア
+        console.log('Redirecting to Google logout:', google_logout_url);
+        window.location.href = google_logout_url;
       } else {
         navigate('/', { replace: true });
       }
     } catch (error) {
-      setMessage(`ログアウトに失敗しました: ${error.response?.data?.error || error.message}`);
       console.error('Logout error:', error.response || error);
+      // エラーでもトークンはクリア（安全のため）
+      localStorage.removeItem('token');
+      Cookies.remove('auth_token');
+      setMessage(`ログアウトに失敗しましたが、トークンをクリアしました。再ログインしてください。`);
+      navigate('/?message=error:ログアウトに失敗しましたが、再ログインしてください', { replace: true });
     } finally {
       setIsSubmitting(false);
     }
