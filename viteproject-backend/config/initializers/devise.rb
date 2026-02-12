@@ -26,6 +26,14 @@ Devise.setup do |config|
 
   config.jwt do |jwt|
     jwt.secret = ENV['SECRET_KEY_BASE'] || raise("SECRET_KEY_BASE is not set in environment variables!")
+
+    if jwt.secret.blank?
+      raise "FATAL: SECRET_KEY_BASE is missing or empty!"
+    end
+  
+    Rails.logger.info "JWT secret loaded: present=#{jwt.secret.present?}, length=#{jwt.secret.length}"
+  
+
     Rails.logger.info "JWT secret loaded: present=#{jwt.secret.present?}, length=#{jwt.secret&.length || 0}"
     jwt.dispatch_requests = [
       ['POST', %r{^/api/sign_in$}],

@@ -22,6 +22,8 @@ class Users::SessionsController < Devise::SessionsController
     if token.blank?
       return render json: { error: 'トークンがありません' }, status: :bad_request
     end
+
+    Rails.logger.info "Logout attempt - Token present: #{token.present?}, length: #{token.length}"
   
     begin
       # devise-jwt の自動revocation（ここでエラーが出る可能性）
