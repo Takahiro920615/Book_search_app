@@ -24,31 +24,32 @@ Devise.setup do |config|
   OmniAuth.config.silence_get_warning = true
 
   config.jwt do |jwt|
-    secret = ENV['SECRET_KEY_BASE']
+    secret = Rails.application.secret_key_base
+  
     if secret.blank?
-      raise "FATAL: SECRET_KEY_BASE is missing! Check Render Environment Variables."
+      raise "SECRET_KEY_BASE missing!"
     end
   
     jwt.secret = secret
   
-    Rails.logger.info "JWT SECRET LOADED (startup)"
-    Rails.logger.info "Present: #{secret.present?}"
+    Rails.logger.info "JWT secret loaded"
     Rails.logger.info "Length: #{secret.length}"
-    Rails.logger.info "First 8 chars: #{secret[0..7]}..."
-    Rails.logger.info "JWT secret loaded: present=#{jwt.secret.present?}, length=#{jwt.secret.length}"
-    Rails.logger.info "JWT secret loaded: present=#{jwt.secret.present?}, length=#{jwt.secret&.length || 0}"
+  
     jwt.dispatch_requests = [
       ['POST', %r{^/api/sign_in$}],
       ['POST', %r{^/api/sign_up$}]
     ]
+  
     jwt.revocation_requests = [
       ['DELETE', %r{^/api/sign_out$}]
     ]
+  
     jwt.request_formats = {
       json: :json,
       user: [:json]
     }
-    jwt.expiration_time = 24.hours.to_i  # 有効期限（オプション）
+  
+    jwt.expiration_time = 24.hours.to_i
   end
 
   config.navigational_formats = [:json]

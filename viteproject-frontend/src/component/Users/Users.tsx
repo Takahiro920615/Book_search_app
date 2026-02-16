@@ -137,31 +137,24 @@ function Users() {
 
   const handleLogout = async () => {
     const token = localStorage.getItem('token');
-    if (!token) {
-      setMessage('トークンがありません。ログインしてください。');
-      navigate('/', { replace: true });
-      return;
-    }
-
+    if (!token) return;
+  
     try {
-      await axios({
-        method: 'delete',
-        url: `${BASE_URL}/api/sign_out`,
-        headers: {
-          Authorization: token,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        withCredentials: true,
+      await axios.delete(`${BASE_URL}/api/sign_out`, {
+        headers: { Authorization: token },
       });
+    
       localStorage.removeItem('token');
       setMessage('ログアウトしました！');
-      navigate('/?message=success:ログアウトしました', { replace: true });
-    } catch (error: any) {
-      console.error('ログアウトエラー:', error);
-      localStorage.removeItem('token');  // エラーでもトークン削除（安全）
-      setMessage('ログアウトに失敗しましたが、トークンをクリアしました。再ログインしてください。');
-      navigate('/?message=error:ログアウトに失敗しましたが、再ログインしてください', { replace: true });
+    
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error(error.response?.data);
+      } else {
+        console.error(error);
+      }
+    
+      localStorage.removeItem('token');
     }
   };
 
