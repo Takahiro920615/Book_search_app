@@ -68,18 +68,15 @@ function Users() {
   useEffect(() => {
     console.log('Users.tsx: Current pathname:', location.pathname);
     console.log('Users.tsx: Query params:', window.location.search);
-
-    const token = localStorage.getItem('token');
-
-  // クエリパラメータからトークン取得（OmniAuth/Googleログイン用）
-  const urlParams = new URLSearchParams(location.search);
-  const tokenFromQuery = urlParams.get('auth_token');
-  if (tokenFromQuery) {
-    const bearerToken = `Bearer ${tokenFromQuery}`;
-    localStorage.setItem('token', bearerToken);
-    console.log('Token saved from query param:', bearerToken);
-    // クエリパラメータをクリア（URLをきれいに）
-    navigate(location.pathname, { replace: true });
+    // クエリパラメータからトークン取得（OmniAuth/Googleログイン用）
+    const urlParams = new URLSearchParams(location.search);
+    const tokenFromQuery = urlParams.get('auth_token');
+    if (tokenFromQuery) {
+      const bearerToken = `Bearer ${tokenFromQuery}`;
+      localStorage.setItem('token', bearerToken);
+      console.log('Token saved from query param:', bearerToken);
+      // クエリパラメータをクリア（URLをきれいに）
+      navigate(location.pathname, { replace: true });
   }
 
   // トークンがなければログイン画面へ
@@ -91,24 +88,20 @@ function Users() {
   const fetchUserData = async () => {
     const currentToken = localStorage.getItem('token');
     if (!currentToken) return;
-
     try {
       const response = await axios.get(`${BASE_URL}/api/user`, {
         headers: {
           Authorization: currentToken,
         },
       });
-
       console.log('User data fetched:', response.data);
       setUserData(response.data);
       setMessage('ユーザー情報を取得しました！');
-
       // ★重要: ここでトークンを再確認・保存（万が一レスポンスに新しいトークンが返ってきた場合）
       // 通常は不要ですが、安全のため
       if (response.headers.authorization) {
         localStorage.setItem('token', response.headers.authorization);
       }
-
     } catch (error: any) {
       console.error('Fetch user error:', error.response?.data || error);
       const errMsg = error.response?.data?.error || error.message;
@@ -151,7 +144,7 @@ function Users() {
     }
 
     try {
-      const response = await axios({
+      await axios({
         method: 'delete',
         url: `${BASE_URL}/api/sign_out`,
         headers: {

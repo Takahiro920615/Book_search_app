@@ -1,4 +1,3 @@
-
 require 'omniauth-google-oauth2'
 
 Devise.setup do |config|
@@ -36,11 +35,7 @@ Devise.setup do |config|
     Rails.logger.info "Present: #{secret.present?}"
     Rails.logger.info "Length: #{secret.length}"
     Rails.logger.info "First 8 chars: #{secret[0..7]}..."
-  end
-  
     Rails.logger.info "JWT secret loaded: present=#{jwt.secret.present?}, length=#{jwt.secret.length}"
-  
-
     Rails.logger.info "JWT secret loaded: present=#{jwt.secret.present?}, length=#{jwt.secret&.length || 0}"
     jwt.dispatch_requests = [
       ['POST', %r{^/api/sign_in$}],
