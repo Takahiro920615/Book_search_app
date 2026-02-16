@@ -25,11 +25,18 @@ Devise.setup do |config|
   OmniAuth.config.silence_get_warning = true
 
   config.jwt do |jwt|
-    jwt.secret = ENV['SECRET_KEY_BASE'] || raise("SECRET_KEY_BASE is not set in environment variables!")
-
-    if jwt.secret.blank?
-      raise "FATAL: SECRET_KEY_BASE is missing or empty!"
+    secret = ENV['SECRET_KEY_BASE']
+    if secret.blank?
+      raise "FATAL: SECRET_KEY_BASE is missing! Check Render Environment Variables."
     end
+  
+    jwt.secret = secret
+  
+    Rails.logger.info "JWT SECRET LOADED (startup)"
+    Rails.logger.info "Present: #{secret.present?}"
+    Rails.logger.info "Length: #{secret.length}"
+    Rails.logger.info "First 8 chars: #{secret[0..7]}..."
+  end
   
     Rails.logger.info "JWT secret loaded: present=#{jwt.secret.present?}, length=#{jwt.secret.length}"
   
