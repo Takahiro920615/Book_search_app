@@ -92,10 +92,10 @@ function Users() {
       const response = await axios.get(`${BASE_URL}/api/user`, {
         headers: {
           Authorization: currentToken,
-        },
+        }
       });
       console.log('User data fetched:', response.data);
-      setUserData(response.data);
+      setUserData(response.data.user ?? response.data);
       setMessage('ユーザー情報を取得しました！');
       // ★重要: ここでトークンを再確認・保存（万が一レスポンスに新しいトークンが返ってきた場合）
       // 通常は不要ですが、安全のため
