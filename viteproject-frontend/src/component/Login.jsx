@@ -59,8 +59,6 @@ function Login() {
       localStorage.setItem('token', token);
       console.log('Login.jsx: Saved token:', token);
       sessionStorage.setItem('oauth_redirect_done', 'true');
-      Cookies.remove('auth_token'); // クッキーをクリア
-      window.history.replaceState(null, '', '/users');
       navigate('/users', { replace: true });
     } else if (!tokenFromCookie && tokenFromStorage && !hasRedirected && location.pathname === '/users') {
       // localStorage にトークンがある場合、/users に留まる
@@ -114,59 +112,36 @@ function Login() {
     if (isSubmitting) return;
     setIsSubmitting(true);
   
-    // localStorage の token を優先的に取得（通常ログインで保存されているもの）
     const token = localStorage.getItem('token');
   
-    // クッキーは Google OAuth 専用として扱う（通常ログインでは使わない）
-    const cookieToken = Cookies.get('auth_token');
-    if (cookieToken) {
-      console.log('Google OAuth token detected in cookie, using it for logout');
-    }
-  
-    // どちらもなければエラー
-    if (!token && !cookieToken) {
-      setMessage('トークンがありません。既にログアウトしています！');
-      console.error('No token available for logout');
+    if (!token) {
+      setMessage('既にログアウトしています');
       setIsSubmitting(false);
       return;
     }
   
-    // token を統一（localStorage優先）
-    const logoutToken = token || `Bearer ${cookieToken}`;
-  
     try {
-      const response = await axios.delete(`${BASE_URL}/api/sign_out`, {
-        headers: { Authorization: logoutToken },
+      await axios.delete(`${BASE_URL}/api/sign_out`, {
+        headers: { Authorization: token },
         withCredentials: true,
       });
-  
-      // 成功したら全ストレージクリア
-      localStorage.removeItem('token');
-      Cookies.remove('auth_token');
-      sessionStorage.removeItem('oauth_redirect_done');
-  
-      setEmail('');
-      setPassword('');
-      setMessage('ログアウトしました！');
-  
-      const { google_logout_url } = response.data;
-      if (google_logout_url) {
-        console.log('Redirecting to Google logout:', google_logout_url);
-        window.location.href = google_logout_url;
-      } else {
-        navigate('/', { replace: true });
-      }
     } catch (error) {
-      console.error('Logout error:', error.response || error);
-      // エラーでもトークンはクリア（安全のため）
-      localStorage.removeItem('token');
-      Cookies.remove('auth_token');
-      setMessage(`ログアウトに失敗しましたが、トークンをクリアしました。再ログインしてください。`);
-      navigate('/?message=error:ログアウトに失敗しましたが、再ログインしてください', { replace: true });
-    } finally {
-      setIsSubmitting(false);
+      console.error('Logout API error:', error);
     }
+  
+    // ← 成功失敗関係なくクリア
+    localStorage.removeItem('token');
+    Cookies.remove('auth_token');
+    sessionStorage.clear();
+  
+    setEmail('');
+    setPassword('');
+    setMessage('ログアウトしました');
+  
+    navigate('/', { replace: true });
+    setIsSubmitting(false);
   };
+  
 
   const handleGoogleLogin = () => {
     if (isSubmitting) return;
@@ -207,7 +182,7 @@ function Login() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
               className="login-input"
-              autoComplete="email"
+              autoComplete="off"
             />
           </div>
           <div className="form-group">
@@ -217,7 +192,7 @@ function Login() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
               className="login-input"
-              autoComplete="current-password"
+              autoComplete="off"
             />
           </div>
           <button type="submit" className="login-button" disabled={isSubmitting}>
