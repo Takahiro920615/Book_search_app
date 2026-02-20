@@ -5,6 +5,7 @@ class SessionsController < ApplicationController
       u.name = auth['info']['name']
       u.provider = auth['provider']
       u.uid = auth['uid']
+      
     end
     session[:user_id] = user.id
     frontend_url = ENV['FRONTEND_URL'] || 'http://localhost:5173'
