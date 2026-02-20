@@ -45,6 +45,7 @@ Devise.setup do |config|
     ]
   
     jwt.request_formats = {
+      json: :json,
       user: [:json]
     }
   
