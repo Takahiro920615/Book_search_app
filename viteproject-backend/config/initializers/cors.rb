@@ -6,9 +6,6 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
       /https:\/\/book-search-[a-z0-9]+-takahiro-shimatanis-projects\.vercel\.app/  
     )
 
-    # ローカル開発用も許可（テストしやすい）
-    # origins 'https://book-search-l822mpvto-takahiro-shimatanis-projects.vercel.app', 'http://localhost:5173', 'https://localhost:5173'
-
     resource '*',
       headers: :any,
       methods: [:get, :post, :put, :patch, :delete, :options, :head],
