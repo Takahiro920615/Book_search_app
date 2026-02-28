@@ -31,9 +31,11 @@ Devise.setup do |config|
     end
   
     jwt.secret = secret
-  
-    Rails.logger.info "JWT secret loaded"
+      
+    Rails.logger.info "JWT secret loaded from credentials"
+    Rails.logger.info "Present: #{secret.present?}"
     Rails.logger.info "Length: #{secret.length}"
+    Rails.logger.info "First 8 chars (masked): #{secret[0..7]}..."
   
     jwt.dispatch_requests = [
       ['POST', %r{^/api/sign_in$}],
