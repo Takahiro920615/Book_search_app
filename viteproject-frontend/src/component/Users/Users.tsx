@@ -148,7 +148,7 @@ function Users() {
         method: 'delete',
         url: `${BASE_URL}/api/sign_out`,
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: token,
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },

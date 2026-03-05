@@ -70,3 +70,5 @@ class Users::SessionsController < Devise::SessionsController
   end
 
 end
+
+Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxNyIsInNjcCI6InVzZXIiLCJhdWQiOm51bGws
