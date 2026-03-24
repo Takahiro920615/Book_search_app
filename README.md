@@ -3,7 +3,7 @@
 **アプリのスクリーンショット
 | ホーム画面 | お気に入り一覧 | 本詳細 |
 |:---:|:---:|:---:|
-| ![ホーム](./images/home.png) | ![お気に入り](./images/favorites.png) | ![詳細](./images/detail.png) |
+| ![ホーム](./images/home.png) | ![お気に入り](./images/favorites.png) | ![詳細](./images/details.png) |
 
 **技術スタック
 **フロントエンド:** Typescript / Vite/ React / Vercel
