@@ -6,7 +6,7 @@
 | ![ホーム](./images/home.png) | ![お気に入り](./images/favorites.png) | ![詳細](./images/details.png) |
 
 **技術スタック
-**フロントエンド:** Typescript / Vite/ React / Vercel
+**フロントエンド:** Typescript / Vite/ React / Vercel  
 **バックエンド:** Ruby on Rails 7.2.3 / MySQL / JWT認証　/ GoogleOAuth / Google Books API
 
 ** 作成理由
@@ -37,7 +37,7 @@ amazonの買いカゴに入れておいたり、気になる本のブラウザ�
  - Ruby 3.3.0 / Node 20.10.0 / MySQL 9.1.0
 
 ### セットアップ
-git clone https://github.com/Takahiro920615/Book_search_app.git
+git clone https://github.com/Takahiro920615/Book_search_app.git  
 ```cd Book_search_app```
 # バックエンド
 ```bundle install && rails db:setup && rails s```
