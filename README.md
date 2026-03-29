@@ -5,7 +5,7 @@
 |:---:|:---:|:---:|
 | ![ホーム](./images/home.png) | ![お気に入り](./images/favorites.png) | ![詳細](./images/details.png) |
 
-**技術スタック
+**技術スタック  
 **フロントエンド:** Typescript / Vite/ React / Vercel  
 **バックエンド:** Ruby on Rails 7.2.3 / MySQL / JWT認証　/ GoogleOAuth / Google Books API
 
@@ -38,6 +38,7 @@ amazonの買いカゴに入れておいたり、気になる本のブラウザ�
 
 ### セットアップ
 git clone https://github.com/Takahiro920615/Book_search_app.git  
+
 ```cd Book_search_app```
 # バックエンド
 ```bundle install && rails db:setup && rails s```
