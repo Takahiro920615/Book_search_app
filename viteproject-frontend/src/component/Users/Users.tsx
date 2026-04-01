@@ -14,12 +14,8 @@ interface UserData {
   last_login?: string;
 }
 
-function Users() {
-  const [userData, setUserData] = useState<UserData | null>(null);
-  const [message, setMessage] = useState('');
-  const [imageUrl, setImageUrl] = useState<string>('/no_image.jpg');
-  const navigate = useNavigate();
-  const location = useLocation();
+const FallingBooksBackground = () => {
+
   const LOCAL_BOOK_IMAGES = [
     '/image1.jpg',
     '/image2.jpg',
@@ -33,38 +29,44 @@ function Users() {
     '/image10.jpg',
   ];
 
-  const FallingBooksBackground = () => {
-    return (
-      <div className="falling-books-wrapper">
-        {[...Array(20)].map((_, i) => {
-         const imageSrc = LOCAL_BOOK_IMAGES[Math.floor(Math.random() * LOCAL_BOOK_IMAGES.length)];
-         const baseSize = 90;
-         const size = baseSize + Math.random() * 130; // 90〜220pxでさらにダイナミック
-         const left = Math.random() * 100;
-         const duration = Math.random() * 25 + 20;   // 20〜45秒でゆ〜っくり
-         const delay = Math.random() * 15;
-         // 回転方向をランダムに（時計回り or 反時計回り）
-         const rotationDirection = Math.random() > 0.5 ? 1 : -1;
-          return (
-            <img
-              key={i}
-              src={imageSrc}
-              alt="falling book"
-              className="falling-book-local"
-              style={{
-                width: `${size}px`,
-                height: 'auto',
-                left: `${left}%`,
-                animationDuration: `${duration}s`,
-                animationDelay: `${delay}s`,
-              }}
-            />
-          );
-        })}
-      </div>
-    );
-  };
+  return (
+    <div className="falling-books-wrapper">
+      {[...Array(20)].map((_, i) => {
+       const imageSrc = LOCAL_BOOK_IMAGES[Math.floor(Math.random() * LOCAL_BOOK_IMAGES.length)];
+       const baseSize = 90;
+       const size = baseSize + Math.random() * 130; // 90〜220pxでさらにダイナミック
+       const left = Math.random() * 100;
+       const duration = Math.random() * 25 + 20;   // 20〜45秒でゆ〜っくり
+       const delay = Math.random() * 15;
+       // 回転方向をランダムに（時計回り or 反時計回り）
+       const rotationDirection = Math.random() > 0.5 ? 1 : -1;
+        return (
+          <img
+            key={i}
+            src={imageSrc}
+            alt="falling book"
+            className="falling-book-local"
+            style={{
+              width: `${size}px`,
+              height: 'auto',
+              left: `${left}%`,
+              animationDuration: `${duration}s`,
+              animationDelay: `${delay}s`,
+            }}
+          />
+        );
+      })}
+    </div>
+  );
+};
 
+function Users() {
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [message, setMessage] = useState('');
+  const [imageUrl, setImageUrl] = useState<string>('/no_image.jpg');
+  const navigate = useNavigate();
+  const location = useLocation();
+  
   useEffect(() => {
     console.log('Users.tsx: Current pathname:', location.pathname);
     console.log('Users.tsx: Query params:', window.location.search);
