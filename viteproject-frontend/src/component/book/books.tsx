@@ -199,23 +199,27 @@ useEffect(() => {
         }));
 
       // --- ランダムに50冊選択 ---
-      const shuffled = items.sort(() => 0.5 - Math.random());
+      const shuffled = [...items];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
       const randomBooks = shuffled.slice(0, 50);
 
-      setNewBooks(randomBooks);
-    } catch (err: any) {
-      const errorMessage =
-        err.response?.data?.error?.message ||
-        err.message ||
-        '新作本の取得に失敗しました';
-      setError(`新作本の取得に失敗しました: ${errorMessage}`);
-    } finally {
-      setLoading(false);
-    }
-  };
+            setNewBooks(randomBooks);
+          } catch (err: any) {
+            const errorMessage =
+              err.response?.data?.error?.message ||
+              err.message ||
+              '新作本の取得に失敗しました';
+            setError(`新作本の取得に失敗しました: ${errorMessage}`);
+          } finally {
+            setLoading(false);
+          }
+        };
 
-  fetchNewBooks();
-}, []);
+        fetchNewBooks();
+      }, []);
 
 
   // 新作本のお気に入り状態更新
