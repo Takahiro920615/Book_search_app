@@ -21,13 +21,13 @@ amazonの買いカゴに入れておいたり、気になる本のブラウザ�
  - 本お気に入り追加機能
  - 本詳細情報表示機能
 
-** 設計の工夫
+## 設計の工夫
 フロントエンドとバックエンドをViteとRailsで分けた理由
  - より安全にJWT認証を行える
  - GoogleBooksAPIキーを隠せる
  - DBでの本情報とユーザー情報の保管が前提のため
 
-** 苦労した点
+## 苦労した点
  - googleログイン認証を導入したこと
  - JWTトークンの認証機能
  - 2つのログイン方法を実装させる際にそれぞれで必要なコードの記載があったので、それぞれアプリ内で機能するようにコード修正をする点に時間がかかりました。
@@ -37,22 +37,24 @@ amazonの買いカゴに入れておいたり、気になる本のブラウザ�
  - Ruby 3.3.0 / Node 20.10.0 / MySQL 9.1.0
 
 ### セットアップ
+```bash
 git clone https://github.com/Takahiro920615/Book_search_app.git  
 
-```cd Book_search_app```
+cd Book_search_app
 # バックエンド
-```bundle install && rails db:setup && rails s```
+bundle install && rails db:setup && rails s
 # フロントエンド
-```cd frontend && yarn install && yarn dev```
+cd frontend && yarn install && yarn dev
+```
 
-** Issueドリブン
+## Issueドリブン
 Issue駆動で開発を進め、機能追加・バグ修正・セキュリティ対応を計12件のIssueで管理しています。
 → [Issueの一覧はこちら](https://github.com/Takahiro920615/Book_search_app/issues)
 
-**開発期間
+##開発期間
 ８ヶ月・Googleログイン機能の修正とJWTトークン認証エラーの修正に主にコミット数を使用しています。
 それ以外ではユーザーホーム画面に動きをつけたり、本一覧ページ、本検索ページ、お気に入り本一覧ページを同じUI内でボタン1つで切り替えができるように繰り返し
 改善しています。
 
-**作者情報
+##作者情報
 https://github.com/Takahiro920615
