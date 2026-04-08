@@ -10,10 +10,7 @@ class ApplicationController < ActionController::API
     Rails.logger.fatal exception.backtrace.join("\n") if exception.backtrace
   
     render json: {
-      error: "Internal Server Error",
-      message: exception.message,
-      type: exception.class.name,
-      backtrace: exception.backtrace&.first(10)  # デバッグ用（本番では削除可）
+      error: "Internal Server Error"
     }, status: :internal_server_error
   end
 
