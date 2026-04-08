@@ -18,5 +18,4 @@ class ApplicationController < ActionController::API
     Rails.logger.error "ParameterMissing: #{e.message}"
     render json: { error: "Missing parameter: #{e.param}" }, status: :bad_request
   end
-
 end
