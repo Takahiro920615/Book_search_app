@@ -1,2 +1,3 @@
 viteproject-backend/log/development.log
 .env
+/config/master.key
