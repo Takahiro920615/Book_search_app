@@ -232,11 +232,6 @@ useEffect(() => {
     );
   }, [favoriteIds]);
 
-  useEffect(() => {
-    console.log('VITE_GOOGLE_CLIENT_ID:', import.meta.env.VITE_GOOGLE_CLIENT_ID);
-    console.log('全環境変数:', import.meta.env);
-  }, []);
-
   // 本の検索
   const searchBooks = async () => {
     if (!query.trim()) {
