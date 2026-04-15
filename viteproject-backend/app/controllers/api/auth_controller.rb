@@ -1,15 +1,19 @@
 class Api::AuthController < ApplicationController
   def me
+    Rails.logger.info "=== /api/auth/me called ==="
+    Rails.logger.info "Cookies: #{cookies.to_h.inspect}"
+    Rails.logger.info "auth_token present? #{cookies[:auth_token].present?}"
     token = cookies[:auth_token]
 
     if token.present?
       begin
         secret = ENV['SECRET_KEY_BASE'] || Rails.application.credentials.secret_key_base
         decoded = JWT.decode(token, secret, true, { algorithm: 'HS256' }).first
-
+        Rails.logger.info "JWT decoded successfully: #{decoded.inspect}"
         user = User.find_by(id: decoded['sub'])
 
         if user
+          Rails.logger.info "User found: #{user.id} - #{user.email}"
           render json: {
             id: user.id,
             email: user.email,

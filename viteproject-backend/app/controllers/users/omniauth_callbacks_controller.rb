@@ -25,13 +25,13 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       Rails.logger.info "Generated JWT token for user #{@user.id}: #{token}"
   
       cookies[:auth_token] = {
-        value: token,
-        httponly: true,
-        secure: Rails.env.production?,
-        same_site: :lax,
-        expires: 1.hour.from_now,
-        path: '/'
-      }
+      value:    token,
+      httponly: true,
+      secure:   Rails.env.production?,   # 本番は true
+      same_site: :none,                  # ← ここを :none に変更（クロスサイト対応）
+      expires:  24.hours.from_now,
+      path:     '/'                      # ← 明示的に追加
+    }
   
       frontend_url = ENV['FRONTEND_URL'] || 'https://book-search-app-pearl.vercel.app'
       # 

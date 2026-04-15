@@ -1,6 +1,6 @@
 // src/Users.tsx
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import './Users.css';
 import Icon from '../Users/icon';
@@ -87,7 +87,8 @@ function Users() {
 
       } catch (error) {
         console.error('Auth check failed:', error);
-        navigate('/login?message=ログインが必要です', { replace: true });
+        // クエリパラメータを一旦外して警告を避ける
+        navigate('/login', { replace: true });
       }
     };
 
