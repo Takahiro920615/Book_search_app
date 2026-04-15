@@ -27,7 +27,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       cookies[:auth_token] = {
       value:    token,
       httponly: true,
-      secure:   Rails.env.production?,   # 本番は true
+      secure:   true,   # 本番は true
       same_site: :none,                  # ← ここを :none に変更（クロスサイト対応）
       expires:  24.hours.from_now,
       path:     '/'                      # ← 明示的に追加
