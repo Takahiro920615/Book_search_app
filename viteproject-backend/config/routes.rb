@@ -20,6 +20,7 @@ Rails.application.routes.draw do
     # v1の外でも使えるように互換ルート（フロントが /api/user で動くように）
     get 'user', to: 'users#show'
     get 'protected', to: 'users#protected'
+    get 'auth/me', to: 'auth#me'
   end
 
   root to: proc { [200, {}, [{status: "API is running"}.to_json]] }
