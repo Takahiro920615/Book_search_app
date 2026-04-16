@@ -13,7 +13,6 @@ module Api
       def create
         book_id = params[:book_id]
         favorite = current_user.favorites.find_or_initialize_by(book_id: book_id)
-        favorite.favorite = true
         if favorite.save
           render json: { message: 'お気に入りに追加しました', book_id: book_id }, status: :ok
         else
