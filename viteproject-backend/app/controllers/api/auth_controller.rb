@@ -13,8 +13,6 @@ class Api::AuthController < ApplicationController
           render json: {
             id: user.id,
             email: user.email,
-            name: user.name || user.email.split('@').first,
-            # 必要に応じて他の情報も追加（last_loginなど）
           }, status: :ok
           return
         end
