@@ -52,21 +52,9 @@ const Books: React.FC = () => {
   // ユーザー認証
   useEffect(() => {
     const verifyUser = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        setError('ログインが必要です');
-        navigate('/?message=ログインが必要です', { replace: true });
-        return;
-      }
-
       try {
-        const response = await axios.get(`${BASE_URL}/api/user`, {
-          headers: {
-            Authorization: token,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          },
-          withCredentials: true,
+        const response = await axios.get(`${BASE_URL}/api/auth/me`, {
+          withCredentials: true, // cookieを自動送信
         });
 
         if (response.data.id !== parseInt(userId || '0', 10)) {
@@ -81,7 +69,6 @@ const Books: React.FC = () => {
       } catch (error: any) {
         console.error('ユーザー検証エラー:', error);
         setError('ユーザー認証に失敗しました');
-        localStorage.removeItem('token');
         navigate('/?message=トークンが無効です。再度ログインしてください', { replace: true });
       }
     };
@@ -108,12 +95,11 @@ const Books: React.FC = () => {
   // お気に入りID取得
   useEffect(() => {
     const fetchFavorites = async () => {
-      const token = localStorage.getItem('token');
-      if (!token || !userId) return;
+      if (!userId) return;
       try {
         const response = await axios.get(`${BASE_URL}/api/v1/favorites`, {
-          headers: { Authorization: token, 'Content-Type': 'application/json' },
-        });
+          withCredentials: true,
+      });
         setFavoriteIds(new Set(response.data.book_ids));
       } catch (err: any) {
         console.error('お気に入り取得エラー:', err);
@@ -264,13 +250,6 @@ useEffect(() => {
 
   // お気に入りトグル
   const toggleFavorite = async (bookId: string) => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      setError('ログインが必要です');
-      navigate('/?message=ログインが必要です', { replace: true });
-      return;
-    }
-
     const isFav = favoriteIds.has(bookId);
     const url = isFav
       ? `${BASE_URL}/api/v1/favorites/${bookId}`
@@ -283,7 +262,7 @@ useEffect(() => {
       await axios({
         method,
         url,
-        headers: { Authorization: token, 'Content-Type': 'application/json' },
+        withCredentials: true,
         data,
       });
 
