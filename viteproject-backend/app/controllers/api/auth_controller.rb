@@ -1,10 +1,7 @@
 class Api::AuthController < ApplicationController
+  include AuthCookie
   def me
-    Rails.logger.info "=== /api/auth/me called ==="
-    Rails.logger.info "Cookies: #{cookies.to_h.inspect}"
-    Rails.logger.info "auth_token present? #{cookies[:auth_token].present?}"
-    token = cookies[:auth_token]
-
+    set_auth_cookie(token)
     if token.present?
       begin
         secret = ENV['SECRET_KEY_BASE'] || Rails.application.credentials.secret_key_base

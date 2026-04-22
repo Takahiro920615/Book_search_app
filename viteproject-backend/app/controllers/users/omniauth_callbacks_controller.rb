@@ -1,6 +1,7 @@
 # app/controllers/users/omniauth_callbacks_controller.rb
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   skip_before_action :verify_authenticity_token, only: [:google_oauth2], raise: false
+  include AuthCookie
 
   def google_oauth2
     Rails.logger.info "OAuth2 callback received"
@@ -23,16 +24,8 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       token = JWT.encode(payload, secret, 'HS256')
   
       Rails.logger.info "Generated JWT token for user #{@user.id}: #{token}"
-  
-      cookies[:auth_token] = {
-      value:    token,
-      httponly: true,
-      secure:   true,   # 本番は true
-      same_site: :none,                  # ← ここを :none に変更（クロスサイト対応）
-      expires:  24.hours.from_now,
-      path:     '/'                      # ← 明示的に追加
-    }
-  
+      set_auth_cookie(token)
+   
       frontend_url = ENV['FRONTEND_URL'] || 'https://book-search-app-pearl.vercel.app'
       # 
       redirect_to "#{frontend_url}/users", allow_other_host: true

@@ -1,5 +1,6 @@
 class Users::SessionsController < Devise::SessionsController
   include Devise::JWT::RevocationStrategies::Denylist
+  include AuthCookie
   skip_before_action :verify_authenticity_token, only: [:create, :destroy], raise: false
   skip_before_action :verify_signed_out_user, only: :destroy
   before_action :set_fake_session_for_devise, only: [:destroy]  # ← destroy限定でOK
@@ -9,7 +10,7 @@ class Users::SessionsController < Devise::SessionsController
     user = User.find_by(email: params[:user][:email])
     if user&.valid_password?(params[:user][:password])
       token = Warden::JWTAuth::UserEncoder.new.call(user, :user, nil).first
-  
+      set_auth_cookie(token)
       render json: { token: token }, status: :ok
     else
       render json: { error: 'Invalid email or password' }, status: :unauthorized
