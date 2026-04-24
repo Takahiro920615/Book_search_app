@@ -7,7 +7,7 @@
 
 ## 技術スタック  
 **フロントエンド:** Typescript / Vite/ React / Vercel  
-**バックエンド:** Ruby on Rails 7.2.3 / MySQL / JWT認証　/ GoogleOAuth / Google Books API
+**バックエンド:** Ruby on Rails 7.2.3 / PostgreSQL / JWT認証　/ GoogleOAuth / Google Books API
 
 ## 作成理由
 気になる本を簡単にリストアップできるアプリが欲しかったのが理由です。
